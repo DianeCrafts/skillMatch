@@ -2,10 +2,9 @@ server:
   port: 8083
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/jobdb
-    username: postgres
-    password: password
+  application:
+    name: job-service
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,5 +12,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  application:
-    name: job-service
+
+  profiles:
+    active: dev
