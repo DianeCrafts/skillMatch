@@ -6,7 +6,7 @@ target/
 
 ### Ignore environment & secret files ###
 application-dev.yaml
-
+application.properties
 ### STS ###
 .apt_generated
 .classpath
