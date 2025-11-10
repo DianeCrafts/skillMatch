@@ -52,8 +52,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             );
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(auth);
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired");
+            return;
         } catch (Exception e) {
-            // invalid/expired token → no auth set; continue to chain (will 401 if endpoint requires auth)
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token");
+            return;
         }
 
         filterChain.doFilter(request, response);

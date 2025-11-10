@@ -1,7 +1,8 @@
 
 
 package com.skillmatch.microservices.user.service;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.skillmatch.microservices.user.repository.UserRepository;
 import com.skillmatch.microservices.user.model.User;
@@ -13,12 +14,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    // Constructor-based dependency injection
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-
     // Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -29,8 +30,16 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+
+
+    // Register new user (handles password hashing)
+    public User registerUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
     // Create or update user
     public User saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -45,11 +54,8 @@ public class UserService {
     }
 
     public boolean loginUser(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-        if (userOpt.isEmpty()) {
-            return false; // user not found
-        }
-        User user = userOpt.get();
-        return user.getPassword().equals(password);
+        return userRepository.findByEmail(email)
+                .map(u -> passwordEncoder.matches(password, u.getPassword()))
+                .orElse(false);
     }
 }

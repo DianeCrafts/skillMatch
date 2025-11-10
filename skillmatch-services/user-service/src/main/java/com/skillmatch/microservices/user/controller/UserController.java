@@ -1,21 +1,19 @@
 package com.skillmatch.microservices.user.controller;
 
-import com.skillmatch.microservices.user.dto.AuthRequest;
-import com.skillmatch.microservices.user.dto.AuthResponse;
-import com.skillmatch.microservices.user.model.Role;
+import com.skillmatch.microservices.user.dto.*;
+import com.skillmatch.microservices.user.mapper.UserMapper;
 import com.skillmatch.microservices.user.model.User;
 import com.skillmatch.microservices.user.security.JwtService;
 import com.skillmatch.microservices.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -25,77 +23,76 @@ public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
+
     // Register new user
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        // Check if email already exists
-        Optional<User> existingUser = userService.findByEmail(user.getEmail());
-        if (existingUser.isPresent()) {
-            return ResponseEntity.badRequest().body(null);
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
+        if (userService.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().build();
         }
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .role(request.getRole())
+                .build();
 
-        User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(savedUser);
+        User savedUser = userService.registerUser(user);
+        return ResponseEntity.ok(UserMapper.toResponse(savedUser));
     }
-//
-//
-//
+
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest req) {
         boolean ok = userService.loginUser(req.getEmail(), req.getPassword());
         if (!ok) {
             return ResponseEntity.badRequest().build();
         }
 
-        // include role in token if you have it
         String role = userService.findByEmail(req.getEmail())
                 .map(user -> user.getRole().name())
                 .orElse("USER");
 
-        String token = jwtService.generateToken(
-                req.getEmail(),
-                Map.of("role", role)
-        );
+        String token = jwtService.generateToken(req.getEmail(), Map.of("role", role));
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
 
-
     // Get all users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> users = userService.getAllUsers()
+                .stream()
+                .map(UserMapper::toResponse)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(users);
     }
 
     // Get user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        return (user != null) ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+        return (user != null)
+                ? ResponseEntity.ok(UserMapper.toResponse(user))
+                : ResponseEntity.notFound().build();
     }
 
-    // Create user (admin use)
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.saveUser(user);
-        return ResponseEntity.ok(createdUser);
-    }
 
-    // Update user
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
+
         User existingUser = userService.getUserById(id);
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
 
-        existingUser.setName(userDetails.getName());
-        existingUser.setEmail(userDetails.getEmail());
-        existingUser.setRole(userDetails.getRole());
+        existingUser.setName(request.getName());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setRole(request.getRole());
 
         User updatedUser = userService.saveUser(existingUser);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(UserMapper.toResponse(updatedUser));
     }
 
     // Delete user
