@@ -15,3 +15,12 @@ spring:
 
   profiles:
     active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+ai:
+  service:
+    url: http://localhost:8000
