@@ -49,8 +49,6 @@ public class ResumeService {
 
     public Resume processAndSave(ParsedResumeDTO parsed, Long userId) {
         Resume resume = resumeMapper.toEntity(parsed, userId);
-        System.out.println("after mapping #############");
-        System.out.println(resume);
         return saveResume(resume);
     }
     public Resume getByUser(Long userId) {

@@ -42,7 +42,7 @@ public class ResumeController {
     }
 
     /** Get Resume for a User */
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<?> getResumeByUser(@PathVariable Long userId) {
         Resume resume = service.getByUser(userId);
         return resume != null ? ResponseEntity.ok(resume)

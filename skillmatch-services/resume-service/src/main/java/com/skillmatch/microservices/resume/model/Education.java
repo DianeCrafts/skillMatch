@@ -6,22 +6,25 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@Table(name = "education")
 @Getter
 @Setter
-@Entity
-@ToString(exclude = "resume")
-@Table(name = "education")
 public class Education {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String institution;
     private String degree;
     private String field;
+
     private java.sql.Date startDate;
     private java.sql.Date endDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
-    @JsonBackReference
+    @JsonBackReference(value = "resume-education")
     private Resume resume;
 }

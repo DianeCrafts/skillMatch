@@ -7,11 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@Table(name = "resumes")
 @Getter
 @Setter
-@Entity
-@ToString(exclude = {})
-@Table(name = "resumes")
 public class Resume {
 
     @Id
@@ -28,12 +27,14 @@ public class Resume {
     private String summary;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "resume-education")
     private List<Education> education;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "resume-experience")
     private List<Experience> experience;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "resume-skill")
     private List<Skill> skills;
 }

@@ -12,7 +12,7 @@ public class ResumeClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public ResumeData getResumeByUserId(String userId) {
-        String url = "http://resume-service/api/resumes/user/" + userId;
+        String url = "http://localhost:8082/api/resumes/user/" + userId;
         return restTemplate.getForObject(url, ResumeData.class);
     }
 }

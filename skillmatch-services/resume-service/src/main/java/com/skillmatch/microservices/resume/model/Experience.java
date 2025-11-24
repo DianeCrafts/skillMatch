@@ -1,26 +1,23 @@
 package com.skillmatch.microservices.resume.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@Table(name = "experience")
 @Getter
 @Setter
-@Entity
-@ToString(exclude = "resume")
-@Table(name = "experience")
 public class Experience {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 500)
     private String company;
-
-    @Column(length = 500)
     private String position;
-
     private java.sql.Date startDate;
     private java.sql.Date endDate;
 
@@ -29,5 +26,6 @@ public class Experience {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
+    @JsonBackReference(value = "resume-experience")
     private Resume resume;
 }
