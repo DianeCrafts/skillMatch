@@ -11,7 +11,7 @@
           Find your <br /> perfect match.
         </h1>
 
-        <button class="get-started-btn">
+        <button class="get-started-btn" @click="$router.push('/login')">
           Get Started
         </button>
       </div>
@@ -35,25 +35,24 @@ export default {
   components: { NavBar },
 };
 </script>
-
 <style scoped>
 /* Background */
 .landing-container {
   min-height: 100vh;
-  background-color: #FFF9F3;
+  background-color: var(--color-bg);
 }
 
 /* Centered Layout */
 .landing-content {
-  max-width: 1200px;     /* keeps content centered */
-  margin: 0 auto;        /* centers horizontally */
-  
+  max-width: 1200px;
+  margin: 0 auto;
+
   display: flex;
-  justify-content: center; /* moves both sections toward the center */
+  justify-content: center;
   align-items: center;
 
-  padding: 4rem 2rem;    /* adds nice outer spacing */
-  gap: 4rem;             /* space between text and image */
+  padding: 4rem 2rem;
+  gap: 4rem;
 }
 
 /* Left side text */
@@ -66,7 +65,7 @@ export default {
   line-height: 1.1;
   font-weight: 600;
   margin-bottom: 2rem;
-  color: #305669; /* main theme color */
+  color: var(--color-primary); /* main theme color */
 }
 
 /* Button */
@@ -74,15 +73,15 @@ export default {
   padding: 1rem 2.5rem;
   font-size: 20px;
   font-weight: 600;
-  color: #ffffff;
-  background-color: #8ABEB9; /* teal button */
+  color: var(--color-white);
+  background-color: var(--color-accent);
   border: none;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .get-started-btn:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 /* Illustration */

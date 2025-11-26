@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.resume.mapper;
 
-import com.skillmatch.microservices.resume.dto.ai.ParsedResumeDTO;
+import com.skillmatch.microservices.resume.dto.ParsedResumeDTO;
 import com.skillmatch.microservices.resume.model.*;
 import org.springframework.stereotype.Component;
 

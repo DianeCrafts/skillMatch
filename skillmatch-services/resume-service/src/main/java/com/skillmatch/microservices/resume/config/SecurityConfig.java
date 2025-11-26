@@ -1,17 +1,16 @@
-package com.skillmatch.microservices.user.config;
+package com.skillmatch.microservices.resume.config;
 
-import com.skillmatch.microservices.user.security.JwtAuthFilter;
+import com.skillmatch.microservices.resume.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-@EnableMethodSecurity
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -21,19 +20,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})   // ✅ Enable CORS inside Spring Security
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> {})   // ✅ allow frontend access
+                .sessionManagement(sm ->
+                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ allow Swagger access
                         .requestMatchers(
-                                "/api/users/register",
-                                "/api/users/login",
-                                "/error",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -41,5 +42,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

@@ -4,9 +4,10 @@
 
       <h2 class="title">Welcome {{ userName }}!</h2>
 
-      <button class="upload-btn" @click="$router.push('/upload-resume')">
-        Upload Resume
+      <button class="upload-btn" @click="goToResumePage">
+        {{ resumeStatus === "Uploaded" ? "Edit Resume" : "Upload Resume" }}
       </button>
+
 
       <p class="resume-status">
         Resume status: <strong>{{ resumeStatus }}</strong>
@@ -23,14 +24,41 @@
     </div>
   </div>
 </template>
-
 <script>
+import resumeApi from "@/apis/resumeApi.js";
+
 export default {
   data() {
     return {
-      userName: "Anna",
-      resumeStatus: "Not uploaded",
+      userName: localStorage.getItem("userName"),
+      resumeStatus: "Checking...",
     };
+  },
+
+  async created() {
+    const userId = localStorage.getItem("userId");
+
+    try {
+      await resumeApi.get(`/resumes/user/${userId}`);
+      this.resumeStatus = "Uploaded";
+    } catch (err) {
+      if (err.response?.status === 404) {
+        this.resumeStatus = "Not uploaded";
+      } else {
+        this.resumeStatus = "Error checking resume";
+        console.error(err);
+      }
+    }
+  },
+
+  methods: {
+    goToResumePage() {
+      if (this.resumeStatus === "Uploaded") {
+        this.$router.push("/edit-resume");
+      } else {
+        this.$router.push("/upload-resume");
+      }
+    }
   }
 };
 </script>

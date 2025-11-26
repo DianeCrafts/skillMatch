@@ -18,9 +18,10 @@
 
         <label>Role</label>
         <select class="input" v-model="role">
-          <option>Select role</option>
-          <option>User</option>
+          <option value="USER">User</option>
+          <option value="RECRUITER">Recruiter</option>
         </select>
+
 
         <button class="auth-btn">Register</button>
 
@@ -30,36 +31,47 @@
 </template>
 
 <script>
+import userApi from "@/apis/userApi";  
+
 export default {
   data() {
     return {
       name: "",
       email: "",
       password: "",
-      role: ""
+      role: "USER"   // recommended default
     };
   },
 
   methods: {
-    register() {
-      // TEMPORARY — until backend is connected
-      // Auto-login the user after registering
-      if (this.role === "USER") {
-        this.$router.push("/dashboard");
-      } 
-      else if (this.role === "RECRUITER") {
-        this.$router.push("/recruiter-dashboard");
+    async register() {
+      try {
+        await userApi.post("/users/register", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          role: this.role  
+        });
+
+        alert("Registration successful! Please login.");
+
+        this.$router.push("/login");
+
+      } catch (err) {
+        alert("Registration failed. Email may already exist.");
+        console.error("Registration error:", err);
       }
     }
   }
 };
 </script>
 
+
+
 <style scoped>
-/* SAME CSS AS BEFORE — unchanged */
 .auth-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
+  background-color: var(--color-bg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,43 +79,52 @@ export default {
 }
 
 .auth-card {
-  background: white;
-  border: 2px solid #305669;
+  background: var(--color-white);
+  border: 2px solid var(--color-primary);
   border-radius: 20px;
-  padding: 3rem 3rem 3.5rem;
+  padding: 1rem;
   width: 380px;
+  box-sizing: border-box;
 }
 
 .title {
   text-align: center;
   font-size: 36px;
-  color: #305669;
+  color: var(--color-primary);
   margin-bottom: 2rem;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .form label {
   font-size: 15px;
-  color: #305669;
+  color: var(--color-primary);
+  text-align: left;
 }
 
 .input {
   width: 100%;
-  border: 2px solid #305669;
+  border: 2px solid var(--color-primary);
   border-radius: 10px;
-  padding: 0.7rem 1rem;
-  margin: 0.7rem 0 1.2rem;
+  padding: 0.7rem;
+  margin: 0.7rem 0;
   font-size: 16px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .input:focus {
-  border-color: #8ABEB9;
+  border-color: var(--color-accent);
 }
 
 .auth-btn {
   width: 100%;
-  background-color: #C1785A;
-  color: white;
+  background-color: var(--color-warm);
+  color: var(--color-white);
   font-size: 18px;
   font-weight: 600;
   padding: 0.9rem;

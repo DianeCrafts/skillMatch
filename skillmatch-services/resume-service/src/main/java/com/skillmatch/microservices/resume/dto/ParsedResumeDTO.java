@@ -1,4 +1,4 @@
-package com.skillmatch.microservices.resume.dto.ai;
+package com.skillmatch.microservices.resume.dto;
 
 import java.util.List;
 

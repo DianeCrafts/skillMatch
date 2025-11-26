@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.resume.controller;
 
-import com.skillmatch.microservices.resume.dto.ai.ParsedResumeDTO;
+import com.skillmatch.microservices.resume.dto.ParsedResumeDTO;
 import com.skillmatch.microservices.resume.model.Resume;
 import com.skillmatch.microservices.resume.service.ResumeService;
 import org.springframework.http.HttpStatus;
@@ -20,26 +20,37 @@ public class ResumeController {
     }
 
     /**  Upload Resume File */
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadResume(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("userId") Long userId) {
+    @PostMapping(value = "/parse",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> parseResumeOnly(@RequestParam("file") MultipartFile file) {
         try {
-            // 1. Extract text
+            // 1. Extract text from PDF/DOCX
             String extractedText = service.parseResume(file);
-            // 2. Send to AI service
+            // 2. Send to AI parser
             ParsedResumeDTO parsed = service.sendToAIService(extractedText);
-            System.out.println(parsed);
-            // 3. Map and save
+            // 3. Return parsed result (NOT saved yet)
+            return ResponseEntity.ok(parsed);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error parsing resume: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> saveParsedResume(
+            @RequestParam Long userId,
+            @RequestBody ParsedResumeDTO parsed
+    ) {
+        try {
             Resume saved = service.processAndSave(parsed, userId);
-            // 4. Return parsed info for user preview
-            return  ResponseEntity.ok(saved);
+            return ResponseEntity.ok(saved);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error processing resume: " + e.getMessage());
+                    .body("Error saving resume: " + e.getMessage());
         }
     }
+
+
 
     /** Get Resume for a User */
     @GetMapping("/user/{userId}")

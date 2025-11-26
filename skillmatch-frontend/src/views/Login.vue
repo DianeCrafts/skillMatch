@@ -19,44 +19,48 @@
     </div>
   </div>
 </template>
-
 <script>
+import userApi from "@/apis/userApi";   // <= Use your user API wrapper
+
 export default {
   data() {
     return {
-      role: "RECRUITER",
       email: "",
       password: ""
     };
   },
 
   methods: {
-    login() {
-      // ⭐ FUTURE BACKEND CALL:
-      // const res = await axios.post("/api/auth/login", {
-      //   email: this.email,
-      //   password: this.password
-      // });
-      //
-      // this.role = res.data.role;
+    async login() {
+      try {
+        const res = await userApi.post("/users/login", {email: this.email,password: this.password});
+        
+        const { token, role, userId, name, email } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userName", name);
+        localStorage.setItem("email", email);
+        if (role === "USER") {
+          this.$router.push("/dashboard");
+        } else if (role === "RECRUITER") {
+          this.$router.push("/recruiter-dashboard");
+        }
 
-      // TEMPORARY MOCK LOGIC:
-      if (this.role === "USER") {
-        this.$router.push("/dashboard");
-      } 
-      else if (this.role === "RECRUITER") {
-        this.$router.push("/recruiter-dashboard");
+      } catch (err) {
+        alert("Invalid credentials");
+        console.error("Login error:", err);
       }
     }
   }
 };
 </script>
 
+
 <style scoped>
-/* EXACT SAME CSS AS BEFORE — unchanged */
 .auth-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
+  background-color: var(--color-bg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,43 +68,52 @@ export default {
 }
 
 .auth-card {
-  background: white;
-  border: 2px solid #305669;
+  background: var(--color-white);
+  border: 2px solid var(--color-primary);
   border-radius: 20px;
-  padding: 3rem 3rem 3.5rem;
+  padding: 1rem;
   width: 380px;
+  box-sizing: border-box;
 }
 
 .title {
   text-align: center;
   font-size: 36px;
-  color: #305669;
+  color: var(--color-primary);
   margin-bottom: 2rem;
 }
 
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .form label {
+  text-align: left;
   font-size: 15px;
-  color: #305669;
+  color: var(--color-primary);
 }
 
 .input {
   width: 100%;
-  border: 2px solid #305669;
+  border: 2px solid var(--color-primary);
   border-radius: 10px;
-  padding: 0.7rem 1rem;
-  margin: 0.7rem 0 1.2rem;
+  padding: 0.7rem;
+  margin: 0.7rem 0;
   font-size: 16px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .input:focus {
-  border-color: #8ABEB9;
+  border-color: var(--color-accent);
 }
 
 .auth-btn {
   width: 100%;
-  background-color: #C1785A;
-  color: white;
+  background-color: var(--color-warm);
+  color: var(--color-white);
   font-size: 18px;
   font-weight: 600;
   padding: 0.9rem;

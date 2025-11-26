@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -44,18 +43,27 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest req) {
+
         boolean ok = userService.loginUser(req.getEmail(), req.getPassword());
         if (!ok) {
             return ResponseEntity.badRequest().build();
         }
+        User user = userService.findByEmail(req.getEmail()).orElseThrow();
 
-        String role = userService.findByEmail(req.getEmail())
-                .map(user -> user.getRole().name())
-                .orElse("USER");
+        String role = user.getRole().name();
+        String token = jwtService.generateToken(req.getEmail(),Map.of("role", role));
 
-        String token = jwtService.generateToken(req.getEmail(), Map.of("role", role));
-        return ResponseEntity.ok(new AuthResponse(token));
+        AuthResponse response = new AuthResponse(
+                token,
+                role,
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+
+        return ResponseEntity.ok(response);
     }
+
 
 
     // Get all users

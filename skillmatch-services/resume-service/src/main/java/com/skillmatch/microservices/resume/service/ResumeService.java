@@ -1,15 +1,13 @@
 package com.skillmatch.microservices.resume.service;
 
-import com.skillmatch.microservices.resume.dto.ai.AIResponse;
-import com.skillmatch.microservices.resume.dto.ai.ParsedResumeDTO;
-import com.skillmatch.microservices.resume.dto.ai.ResumeParseRequest;
+import com.skillmatch.microservices.resume.dto.AIResponse;
+import com.skillmatch.microservices.resume.dto.ParsedResumeDTO;
+import com.skillmatch.microservices.resume.dto.ResumeParseRequest;
 import com.skillmatch.microservices.resume.mapper.ResumeMapper;
 import com.skillmatch.microservices.resume.model.*;
 import com.skillmatch.microservices.resume.repository.ResumeRepository;
 import org.apache.tika.Tika;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 

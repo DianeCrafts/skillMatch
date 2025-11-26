@@ -3,8 +3,9 @@
 
     <div class="upload-card">
 
-      <h2 class="title">Upload Resume</h2>
+      <h2 class="title">Resume Options</h2>
 
+      <!-- OPTION 1 — Upload Resume -->
       <div 
         class="drop-area"
         @dragover.prevent
@@ -21,12 +22,23 @@
 
       <p class="formats">PDF, DOC, DOCX</p>
 
-      <div v-if="uploadedFileName" class="uploaded-section">
-        <label>Uploaded resume:</label>
-        <input type="text" :value="uploadedFileName" class="uploaded-input" disabled />
-      </div>
+      <button
+        class="parse-btn"
+        :disabled="!selectedFile"
+        @click="parseResume"
+      >
+        Parse Resume
+      </button>
 
-      <button class="replace-btn" @click="replaceFile">Replace Resume</button>
+      <div class="or-box">OR</div>
+
+      <!-- OPTION 2 — Manual entry -->
+      <button
+        class="manual-btn"
+        @click="goToManualForm"
+      >
+        Enter Resume Manually
+      </button>
 
     </div>
 
@@ -34,26 +46,50 @@
 </template>
 
 <script>
+import resumeApi from "@/apis/resumeApi.js";
+
 export default {
   data() {
     return {
-      uploadedFileName: "resume.pdf" // Example placeholder
+      selectedFile: null
     };
   },
 
   methods: {
     handleFile(event) {
-      const file = event.target.files[0];
-      if (file) this.uploadedFileName = file.name;
+      this.selectedFile = event.target.files[0];
     },
 
     handleDrop(event) {
-      const file = event.dataTransfer.files[0];
-      if (file) this.uploadedFileName = file.name;
+      this.selectedFile = event.dataTransfer.files[0];
     },
 
-    replaceFile() {
-      alert("Resume replaced (placeholder)");
+    async parseResume() {
+      if (!this.selectedFile) return;
+
+      const formData = new FormData();
+      formData.append("file", this.selectedFile);
+
+      try {
+        const res = await resumeApi.post("/api/resumes/parse", formData);
+
+        // go to form page with parsed result
+        this.$router.push({
+          path: "/resume-form",
+          query: { parsed: JSON.stringify(res.data) }
+        });
+
+      } catch (err) {
+        alert("Error parsing resume");
+        console.error(err);
+      }
+    },
+
+    goToManualForm() {
+      this.$router.push({
+        path: "/resume-form",
+        query: { parsed: JSON.stringify(null) }
+      });
     }
   }
 };
@@ -73,7 +109,7 @@ export default {
   background: white;
   border-radius: 16px;
   padding: 2.5rem 3rem;
-  width: 480px;
+  width: 500px;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
@@ -118,32 +154,34 @@ export default {
   margin-bottom: 1.6rem;
 }
 
-.uploaded-section {
-  text-align: left;
-  margin-bottom: 1.4rem;
-}
-
-.uploaded-input {
+.parse-btn,
+.manual-btn {
   width: 100%;
-  background: #FFF4E8;
-  border: 1px solid #E0C7B8;
-  padding: 0.7rem;
-  border-radius: 8px;
-  margin-top: 0.3rem;
-}
-
-.replace-btn {
-  width: 100%;
-  background-color: #C1785A;
-  color: white;
   font-size: 18px;
   padding: 0.9rem;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin-top: 0.8rem;
 }
 
-.replace-btn:hover {
-  opacity: 0.95;
+.parse-btn {
+  background: #8ABEB9;
+  color: white;
+}
+.parse-btn:disabled {
+  background: #aacfcf;
+  cursor: not-allowed;
+}
+
+.manual-btn {
+  background: #C1785A;
+  color: white;
+}
+
+.or-box {
+  margin: 1.4rem 0;
+  font-weight: bold;
+  color: #305669;
 }
 </style>

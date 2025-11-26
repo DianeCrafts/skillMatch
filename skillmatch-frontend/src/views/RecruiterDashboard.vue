@@ -22,7 +22,7 @@
 export default {
   data() {
     return {
-      recruiterName: "Alex"
+      userName: localStorage.getItem("userName"),
     };
   }
 };

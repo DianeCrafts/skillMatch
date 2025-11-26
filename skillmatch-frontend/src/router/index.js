@@ -9,6 +9,7 @@ import UploadResume from "../views/UploadResume.vue";
 import Jobs from "../views/Jobs.vue";
 import JobDetails from "../views/JobDetails.vue";
 import JobApplicants from "../views/JobApplicants.vue";
+import ResumeForm from "@/views/ResumeForm.vue";
 /* RECRUITER PAGES */
 import RecruiterDashboard from "../views/RecruiterDashboard.vue";
 import PostJob from "../views/PostJob.vue";
@@ -22,6 +23,7 @@ const routes = [
   /* USER */
   { path: "/dashboard", component: Dashboard },
   { path: "/upload-resume", component: UploadResume },
+  { path: "/resume-form", component: ResumeForm },
   { path: "/jobs", component: Jobs },
   { path: "/jobs/:id", component: JobDetails, props: true },
 
