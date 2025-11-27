@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const jobApi = axios.create({
-  baseURL: "http://localhost:8083/api",
+  baseURL: "http://localhost:8083/api/jobs",
 });
 
 jobApi.interceptors.request.use(config => {

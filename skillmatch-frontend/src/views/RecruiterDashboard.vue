@@ -1,6 +1,9 @@
 <template>
   <div class="recruiter-page">
 
+    <!-- Logout Button -->
+    <button class="logout-btn" @click="logout">Logout</button>
+
     <h1 class="welcome-title">Welcome, {{ recruiterName }}</h1>
 
     <div class="dashboard-card">
@@ -22,8 +25,15 @@
 export default {
   data() {
     return {
-      userName: localStorage.getItem("userName"),
+      recruiterName: localStorage.getItem("userName"),
     };
+  },
+
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push("/");
+    }
   }
 };
 </script>
@@ -32,7 +42,7 @@ export default {
 /* PAGE BACKGROUND */
 .recruiter-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
+  background-color: var(--color-bg);
 
   display: flex;
   flex-direction: column;
@@ -40,19 +50,39 @@ export default {
   align-items: center;
 
   padding-top: 4rem;
+  position: relative; /* Needed for logout positioning */
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: var(--color-red);
+  color: var(--color-white);
+
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  opacity: 0.9;
 }
 
 /* WELCOME TITLE */
 .welcome-title {
   font-size: 48px;
   font-weight: 600;
-  color: #305669;
+  color: var(--color-primary);
   margin-bottom: 2.5rem;
 }
 
 /* MAIN CARD */
 .dashboard-card {
-  background: white;
+  background: var(--color-white);
   border-radius: 16px;
   padding: 2.5rem 3rem;
   width: 420px;
@@ -71,14 +101,16 @@ export default {
   padding: 1rem 0;
   font-size: 20px;
   font-weight: 500;
-  color: #305669;
-  background: #F5F1EE;
-  border: 2px solid #E5DFDA;
+
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+
   border-radius: 12px;
   cursor: pointer;
 }
 
 .action-btn:hover {
-  background: #ECE7E3;
+  background: var(--color-border);
 }
 </style>

@@ -8,8 +8,9 @@ import com.skillmatch.microservices.job.model.Job;
 
 import java.util.List;
 public interface JobService {
-    Job createJob(String recruiterId, CreateJobRequest request);
-    Job updateJob(String id, UpdateJobRequest request);
-    void deleteJob(String id);
-    Job getJob(String id);
+    Job createJob(Long recruiterId, CreateJobRequest request);
+    Job updateJob(Long id, UpdateJobRequest request);
+    void deleteJob(Long id);
+    Job getJob(Long id);
+    List<Job> getAllJobs();
 }

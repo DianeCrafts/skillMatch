@@ -21,6 +21,15 @@
       </div>
 
       <p class="formats">PDF, DOC, DOCX</p>
+      <div v-if="uploadedFileName" class="uploaded-section">
+        <label>Selected File:</label>
+        <input
+          type="text"
+          class="uploaded-input"
+          :value="uploadedFileName"
+          disabled
+        />
+      </div>
 
       <button
         class="parse-btn"
@@ -51,29 +60,36 @@ import resumeApi from "@/apis/resumeApi.js";
 export default {
   data() {
     return {
-      selectedFile: null
+      selectedFile: null,
+      uploadedFileName: "" 
     };
   },
 
   methods: {
     handleFile(event) {
       this.selectedFile = event.target.files[0];
+      this.uploadedFileName = this.selectedFile?.name || "";
     },
 
     handleDrop(event) {
       this.selectedFile = event.dataTransfer.files[0];
+      this.uploadedFileName = this.selectedFile?.name || "";
     },
 
     async parseResume() {
       if (!this.selectedFile) return;
 
+      const userId = localStorage.getItem("userId");
+
       const formData = new FormData();
       formData.append("file", this.selectedFile);
+      // formData.append("userId", userId);   // ✅ REQUIRED
 
       try {
-        const res = await resumeApi.post("/api/resumes/parse", formData);
+        const res = await resumeApi.post("/resumes/parse", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
 
-        // go to form page with parsed result
         this.$router.push({
           path: "/resume-form",
           query: { parsed: JSON.stringify(res.data) }
@@ -84,6 +100,7 @@ export default {
         console.error(err);
       }
     },
+
 
     goToManualForm() {
       this.$router.push({
@@ -184,4 +201,20 @@ export default {
   font-weight: bold;
   color: #305669;
 }
+
+.uploaded-section {
+  text-align: left;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.uploaded-input {
+  width: 100%;
+  background: #FFF4E8;
+  border: 1px solid #E0C7B8;
+  padding: 0.7rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+}
+
 </style>

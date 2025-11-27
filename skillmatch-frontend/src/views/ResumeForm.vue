@@ -142,21 +142,51 @@ export default {
   },
 
   created() {
-    const parsed = this.$route.query.data;
+    const parsed = this.$route.query.parsed;
+    const resumeId = this.$route.query.resumeId;
 
+    // CASE 1 — Parsed resume from upload
     if (parsed) {
       const data = JSON.parse(parsed);
-      this.form = {
-        ...this.form,
-        ...data,
-        education: data.education || [],
-        experience: data.experience || [],
-        skills: data.skills || []
-      };
+      this.mode = "create";
+      this.form = { ...this.form, ...data };
+      return;
     }
+
+    // CASE 2 — Editing existing resume
+    if (resumeId) {
+      this.mode = "edit";
+      this.loadExistingResume(resumeId);
+      return;
+    }
+
+    // CASE 3 — Manual new resume
+    this.mode = "create";
   },
 
   methods: {
+    async loadExistingResume(userId) {
+      try {
+        const res = await resumeApi.get(`/resumes/user/${userId}`);
+        const data = res.data;
+
+        this.form = {
+          summary: data.summary || "",
+          name: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          education: data.education || [],
+          experience: data.experience || [],
+          skills: data.skills || []
+        };
+
+        this.existingResumeId = data.id;
+
+      } catch (err) {
+        console.error("Error loading resume", err);
+        alert("Could not load resume to edit.");
+      }
+    },
     // Add sections
     addEducation() {
       this.form.education.push({
@@ -196,12 +226,18 @@ export default {
     },
 
     async saveResume() {
+      console.log("@@@@@@@@@@@@@@@@@@@@@@")
       try {
         const userId = localStorage.getItem("userId");
+        console.log(this.form)
+        if (this.mode === "edit") {
+          await resumeApi.put(`/resumes/${this.existingResumeId}`, this.form);
+          alert("Resume updated!");
+        } else {
+          await resumeApi.post(`/resumes/save?userId=${userId}`, this.form);
+          alert("Resume created!");
+        }
 
-        await resumeApi.post(`/resumes/save?userId=${userId}`, this.form);
-
-        alert("Resume saved!");
         this.$router.push("/dashboard");
 
       } catch (err) {
@@ -209,6 +245,7 @@ export default {
         alert("Error saving resume");
       }
     }
+
   }
 };
 </script>

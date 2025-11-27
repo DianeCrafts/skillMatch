@@ -6,7 +6,13 @@ import java.util.List;
 public class UpdateJobRequest {
     private String title;
     private String description;
-    private List<String> skillsRequired;
+
+    private List<String> requirements;
     private String location;
+
+    private String salary;
+    private String experience;
+
+    private List<String> skills;
     private boolean remote;
 }

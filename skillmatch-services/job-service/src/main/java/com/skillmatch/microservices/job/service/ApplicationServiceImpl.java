@@ -10,6 +10,8 @@ import com.skillmatch.microservices.job.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
@@ -19,7 +21,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ResumeClient resumeClient;
 
     @Override
-    public JobApplication applyToJob(String jobId, String userId) {
+    public JobApplication applyToJob(Long jobId, Long userId) {
 
         // Validate job exists
         Job job = jobRepository.findById(jobId)
@@ -32,25 +34,28 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new RuntimeException("User has no parsed resume uploaded");
         }
 
+        List<String> jobSkills = job.getSkills(); // ✔ updated field name
+
         // Count skill matches
         int matches = 0;
         for (SkillData skill : resume.getSkills()) {
-            if (job.getSkillsRequired().contains(skill.getName())) {
+            if (jobSkills.contains(skill.getName())) {
                 matches++;
             }
         }
 
-        double score = job.getSkillsRequired().isEmpty()
+        double score = jobSkills.isEmpty()
                 ? 0.0
-                : (double) matches / job.getSkillsRequired().size() * 100.0;
+                : (double) matches / jobSkills.size() * 100.0;
 
         // Save job application
         JobApplication app = new JobApplication();
         app.setJobId(jobId);
         app.setUserId(userId);
-        app.setResumeId(String.valueOf(resume.getId()));
+        app.setResumeId(resume.getId());  // ✔ resumeId is now Long
         app.setMatchScore(score);
 
         return applicationRepository.save(app);
     }
 }
+

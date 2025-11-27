@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.resume.dto;
 
-public record ParsedEducationDTO(
+public record EducationDTO(
         String institution,
         String degree,
         String field,

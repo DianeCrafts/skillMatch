@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 public class JobApplication {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String jobId;
+    private Long jobId;
 
-    private String userId;
+    private Long userId;
 
-    private String resumeId;
+    private Long resumeId;
 
     private Double matchScore;
 

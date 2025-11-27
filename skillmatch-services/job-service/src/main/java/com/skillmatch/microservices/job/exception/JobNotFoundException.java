@@ -1,7 +1,7 @@
 package com.skillmatch.microservices.job.exception;
 
 public class JobNotFoundException extends RuntimeException {
-    public JobNotFoundException(String id) {
+    public JobNotFoundException(Long id) {
         super("Job not found: " + id);
     }
 }

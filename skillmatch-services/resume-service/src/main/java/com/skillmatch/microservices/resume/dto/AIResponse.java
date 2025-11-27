@@ -1,3 +1,3 @@
 package com.skillmatch.microservices.resume.dto;
 
-public record AIResponse(String status, ParsedResumeDTO data) {}
+public record AIResponse(String status, ResumeDTO data) {}

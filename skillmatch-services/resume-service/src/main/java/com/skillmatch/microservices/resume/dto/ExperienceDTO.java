@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.resume.dto;
 
-public record ParsedExperienceDTO(
+public record ExperienceDTO(
         String company,
         String position,
         String startDate,   // match entity

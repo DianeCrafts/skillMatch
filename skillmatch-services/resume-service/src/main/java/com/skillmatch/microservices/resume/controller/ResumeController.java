@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.resume.controller;
 
-import com.skillmatch.microservices.resume.dto.ParsedResumeDTO;
+import com.skillmatch.microservices.resume.dto.ResumeDTO;
 import com.skillmatch.microservices.resume.model.Resume;
 import com.skillmatch.microservices.resume.service.ResumeService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class ResumeController {
             // 1. Extract text from PDF/DOCX
             String extractedText = service.parseResume(file);
             // 2. Send to AI parser
-            ParsedResumeDTO parsed = service.sendToAIService(extractedText);
+            ResumeDTO parsed = service.sendToAIService(extractedText);
             // 3. Return parsed result (NOT saved yet)
             return ResponseEntity.ok(parsed);
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class ResumeController {
     @PostMapping("/save")
     public ResponseEntity<?> saveParsedResume(
             @RequestParam Long userId,
-            @RequestBody ParsedResumeDTO parsed
+            @RequestBody ResumeDTO parsed
     ) {
         try {
             Resume saved = service.processAndSave(parsed, userId);
@@ -51,18 +51,22 @@ public class ResumeController {
     }
 
 
-
-    /** Get Resume for a User */
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getResumeByUser(@PathVariable Long userId) {
         Resume resume = service.getByUser(userId);
-        return resume != null ? ResponseEntity.ok(resume)
+        return resume != null
+                ? ResponseEntity.ok(service.toDto(resume))
                 : ResponseEntity.notFound().build();
     }
 
-    /** Update Resume (after user corrections) */
+
     @PutMapping("/{resumeId}")
-    public ResponseEntity<Resume> updateResume(@PathVariable Long resumeId, @RequestBody Resume updated) {
-        return ResponseEntity.ok(service.updateResume(resumeId, updated));
+    public ResponseEntity<ResumeDTO> updateResume(
+            @PathVariable Long resumeId,
+            @RequestBody ResumeDTO dto
+    ) {
+        Resume updated = service.updateFromDTO(resumeId, dto);
+        return ResponseEntity.ok(service.toDto(updated));
     }
+
 }

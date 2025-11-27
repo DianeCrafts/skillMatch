@@ -1,7 +1,7 @@
 package com.skillmatch.microservices.resume.service;
 
 import com.skillmatch.microservices.resume.dto.AIResponse;
-import com.skillmatch.microservices.resume.dto.ParsedResumeDTO;
+import com.skillmatch.microservices.resume.dto.ResumeDTO;
 import com.skillmatch.microservices.resume.dto.ResumeParseRequest;
 import com.skillmatch.microservices.resume.mapper.ResumeMapper;
 import com.skillmatch.microservices.resume.model.*;
@@ -31,7 +31,7 @@ public class ResumeService {
     }
 
     /** Step 2: Send extracted text to AIService */
-    public ParsedResumeDTO sendToAIService(String text) {
+    public ResumeDTO sendToAIService(String text) {
         return webClient.post()
                 .uri("http://localhost:8000/api/ai/parse-resume")
                 .bodyValue(new ResumeParseRequest(text))
@@ -45,7 +45,7 @@ public class ResumeService {
         return repo.save(resume);
     }
 
-    public Resume processAndSave(ParsedResumeDTO parsed, Long userId) {
+    public Resume processAndSave(ResumeDTO parsed, Long userId) {
         Resume resume = resumeMapper.toEntity(parsed, userId);
         return saveResume(resume);
     }
@@ -53,8 +53,17 @@ public class ResumeService {
         return repo.findByUserId(userId);
     }
 
-    public Resume updateResume(Long resumeId, Resume updated) {
-        updated.setId(resumeId);
-        return repo.save(updated);
+    public ResumeDTO toDto(Resume resume){
+        return resumeMapper.toDTO(resume);
     }
+
+    public Resume updateFromDTO(Long resumeId, ResumeDTO dto) {
+        Resume existing = repo.findById(resumeId)
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
+
+        resumeMapper.mergeIntoExisting(existing, dto);
+
+        return repo.save(existing);
+    }
+
 }
