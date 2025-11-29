@@ -9,7 +9,7 @@ import java.util.List;
 public class CreateJobRequest {
     private String title;
     private String description;
-
+//    private String companyName;
     private List<String> requirements;
     private String location;
 

@@ -1,217 +1,274 @@
 <template>
-  <div class="details-page">
-
-    <div class="details-card">
-
-      <!-- JOB TITLE + COMPANY -->
+  <div class="job-details-container" v-if="job">
+    
+    <!-- HEADER -->
+    <div class="job-header">
       <h1 class="job-title">{{ job.title }}</h1>
-      <h3 class="company">{{ job.company }}</h3>
-
-      <div class="divider"></div>
-
-      <!-- Description -->
-      <h2 class="section-title">Description</h2>
-      <p class="description-text">
-        {{ job.description }}
-      </p>
-
-      <!-- Skills -->
-      <h2 class="section-title">Required Skills</h2>
-
-      <div class="skills">
-        <span v-for="tag in job.skills" :key="tag" class="skill-tag">
-          {{ tag }}
-        </span>
-      </div>
-
-      <!-- Upload resume link -->
-      <p class="upload-resume" @click="$router.push('/upload-resume')">
-        Upload Resume
-      </p>
-
-      <!-- Apply Button -->
-      <button class="apply-btn" @click="applyToJob">
-        Apply Now
-      </button>
-
-      <!-- Save job -->
-      <button class="save-btn" @click="toggleSave">
-        {{ saved ? "♥ Saved" : "♡ Save" }}
-      </button>
-
+      <p class="company-name">Company: <span>Unknown Company</span></p>
     </div>
 
+    <!-- MAIN CARD -->
+    <div class="job-card">
+
+      <!-- META INFO -->
+      <div class="meta-info">
+        <div class="meta-box">
+          <span class="meta-label">📍 Location</span>
+          <span class="meta-value">{{ job.location }}</span>
+        </div>
+
+        <div class="meta-box">
+          <span class="meta-label">💼 Experience</span>
+          <span class="meta-value">{{ job.experience }}</span>
+        </div>
+
+        <div class="meta-box">
+          <span class="meta-label">💰 Salary</span>
+          <span class="meta-value">{{ job.salary }}</span>
+        </div>
+
+        <div class="meta-box">
+          <span class="meta-label">🏠 Remote</span>
+          <span class="meta-value">{{ job.remote ? 'Yes' : 'No' }}</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- DESCRIPTION -->
+      <section class="section">
+        <h3 class="section-title">📄 Job Description</h3>
+        <p class="section-text">{{ job.description }}</p>
+      </section>
+
+      <!-- REQUIREMENTS -->
+      <section class="section">
+        <h3 class="section-title">📌 Requirements</h3>
+
+        <ul class="requirements-list">
+          <li v-for="req in job.requirements" :key="req">• {{ req }}</li>
+        </ul>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="section">
+        <h3 class="section-title">🧠 Skills Needed</h3>
+
+        <div class="tags">
+          <span v-for="skill in job.skills" :key="skill" class="tag">
+            {{ skill }}
+          </span>
+        </div>
+      </section>
+
+      <!-- APPLY BUTTON -->
+      <div class="apply-wrapper">
+        <button 
+          v-if="!hasApplied"
+          class="apply-btn"
+          @click="applyToJob"
+        >
+          Apply Now
+        </button>
+
+        <button v-else class="applied-btn" disabled>
+          ✔ Already Applied
+        </button>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
+import jobsApi from "@/apis/jobApi.js";
+
 export default {
   props: ["id"],
 
   data() {
     return {
-      saved: false,
-
-      // Example job — will be replaced by backend later
-      job: {
-        id: null,
-        title: "",
-        company: "",
-        description: "",
-        skills: []
-      }
+      job: null,
+      hasApplied: false
     };
   },
 
-  created() {
+  mounted() {
     this.loadJobDetails();
+    this.checkAppliedStatus();
   },
 
   methods: {
     loadJobDetails() {
-      const jobId = this.id;
+      jobsApi.get(`/${this.id}`)
+        .then(res => {
+          this.job = res.data;
+        })
+        .catch(err => console.error("Failed to load job details:", err));
+    },
 
-      // FUTURE BACKEND CALL:
-      // const res = await axios.get(`/api/jobs/${jobId}`);
-      // this.job = res.data;
+    checkAppliedStatus() {
+      const userId = localStorage.getItem("userId");
 
-      // Temporary mock data:
-      const mockJobs = [
-        {
-          id: 1,
-          title: "Software Engineer",
-          company: "Tech Solutions",
-          description:
-            "Design, develop, and implement software applications. Collaborate with cross-functional teams; ensure code quality, performance, and scalability. Troubleshoot issues and debug applications.",
-          skills: ["Python", "SQL"]
-        },
-        {
-          id: 2,
-          title: "Marketing Manager",
-          company: "Creative Agency",
-          description:
-            "Lead marketing campaigns. Develop strategies to increase engagement and brand reach.",
-          skills: ["SEO", "Communication"]
-        }
-      ];
-
-      this.job = mockJobs.find(j => j.id == jobId) || mockJobs[0];
+      jobsApi.get("/applied", {
+        headers: { "x-user-id": userId }
+      })
+        .then(res => {
+          this.hasApplied = res.data.some(j => j.id === parseInt(this.id));
+        })
+        .catch(err => console.log("Applied fetch error:", err));
     },
 
     applyToJob() {
-      console.log("Applying to job", this.job);
+      const userId = localStorage.getItem("userId");
 
-      // FUTURE:
-      // await axios.post("/api/jobs/apply", { jobId: this.job.id });
+      if (!userId) {
+        alert("You must be logged in to apply.");
+        return;
+      }
 
-      alert("Applied! (mock)");
-    },
-
-    toggleSave() {
-      this.saved = !this.saved;
-
-      // FUTURE BACKEND:
-      // if (this.saved) await axios.post('/api/jobs/save', { jobId: this.job.id });
-      // else await axios.delete('/api/jobs/save/' + this.job.id);
+      jobsApi.post(`/${this.id}/apply`, null, {
+        headers: { "x-user-id": userId }
+      })
+        .then(() => {
+          alert("Applied successfully!");
+          this.hasApplied = true;
+        })
+        .catch(err => console.error(err));
     }
   }
 };
 </script>
 
 <style scoped>
-.details-page {
-  min-height: 100vh;
-  background-color: #FFF9F3;
-  display: flex;
-  justify-content: center;
-  padding: 3rem 2rem;
+/* PAGE LAYOUT */
+.job-details-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 1.5rem;
 }
 
-.details-card {
-  width: 650px;
-  background: white;
+/* HEADER */
+.job-header {
+  background: linear-gradient(135deg, #305669, #4a7e91);
+  padding: 2rem;
   border-radius: 16px;
-  padding: 2.5rem 3rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
 }
 
 .job-title {
-  font-size: 36px;
-  color: #305669;
-  margin-bottom: 0.5rem;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 }
 
-.company {
-  font-size: 20px;
-  color: #305669;
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  height: 1px;
-  background: #e4e4e4;
-  margin-bottom: 1.5rem;
-}
-
-.section-title {
-  font-size: 20px;
-  color: #305669;
-  font-weight: 600;
-  margin-bottom: 0.6rem;
-}
-
-.description-text {
-  color: #305669;
-  line-height: 1.5;
-  margin-bottom: 1.8rem;
-}
-
-.skills {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.skill-tag {
-  background-color: #305669;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.upload-resume {
-  color: #305669;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-bottom: 1.8rem;
-}
-
-.apply-btn {
-  width: 100%;
-  background-color: #C1785A;
-  color: white;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 10px;
+.company-name {
   font-size: 18px;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.apply-btn:hover {
   opacity: 0.9;
 }
 
-.save-btn {
-  background: none;
-  border: none;
-  color: #305669;
-  font-size: 18px;
-  cursor: pointer;
+/* MAIN CARD */
+.job-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
 }
 
-.save-btn:hover {
-  opacity: 0.6;
+/* META INFO */
+.meta-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.meta-box {
+  background: #f7fafb;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+}
+
+.meta-label {
+  font-weight: 600;
+  color: #305669;
+  display: block;
+}
+
+.meta-value {
+  font-size: 16px;
+  color: #444;
+}
+
+/* SECTION */
+.section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 22px;
+  color: #305669;
+  margin-bottom: 0.6rem;
+}
+
+.section-text {
+  font-size: 16px;
+  color: #444;
+}
+
+/* REQUIREMENTS */
+.requirements-list li {
+  font-size: 16px;
+  color: #444;
+  margin: 4px 0;
+}
+
+/* TAGS */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.tag {
+  background: #305669;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* APPLY BUTTON */
+.apply-wrapper {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.apply-btn {
+  background: #C1785A;
+  color: white;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.apply-btn:hover {
+  opacity: 0.92;
+}
+
+.applied-btn {
+  background: gray;
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  border: none;
+  font-size: 18px;
 }
 </style>

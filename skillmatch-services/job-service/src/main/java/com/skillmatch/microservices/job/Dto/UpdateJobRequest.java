@@ -6,7 +6,7 @@ import java.util.List;
 public class UpdateJobRequest {
     private String title;
     private String description;
-
+//    private String companyName;
     private List<String> requirements;
     private String location;
 

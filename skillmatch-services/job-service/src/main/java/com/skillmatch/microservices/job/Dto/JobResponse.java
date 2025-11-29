@@ -9,7 +9,7 @@ public class JobResponse {
     private Long id;
     private String title;
     private String description;
-
+//    private String companyName;
     private List<String> requirements;
     private String location;
 

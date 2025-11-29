@@ -26,15 +26,17 @@ public class Job {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private String companyName;
+
     // Requirements
     @ElementCollection
     private List<String> requirements;
 
     private String location;
 
-    private String salary;       // Added
+    private String salary;
 
-    private String experience;   // Added
+    private String experience;
 
     // Skills
     @ElementCollection
