@@ -1,12 +1,12 @@
 <template>
   <div class="recruiter-page">
 
-    <!-- Logout Button -->
+    <!-- Logout button -->
     <button class="logout-btn" @click="logout">Logout</button>
 
-    <h1 class="welcome-title">Welcome, {{ recruiterName }}</h1>
-
     <div class="dashboard-card">
+
+      <h1 class="welcome-title">Welcome, {{ recruiterName }}!</h1>
 
       <button class="action-btn" @click="$router.push('/post-job')">
         Post a Job
@@ -45,12 +45,11 @@ export default {
   background-color: var(--color-bg);
 
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  padding: 2rem;
 
-  padding-top: 4rem;
-  position: relative; /* Needed for logout positioning */
+  position: relative; /* for logout absolute positioning */
 }
 
 /* LOGOUT BUTTON */
@@ -72,45 +71,44 @@ export default {
   opacity: 0.9;
 }
 
-/* WELCOME TITLE */
-.welcome-title {
-  font-size: 48px;
-  font-weight: 600;
-  color: var(--color-primary);
-  margin-bottom: 2.5rem;
-}
-
-/* MAIN CARD */
+/* DASHBOARD CARD */
 .dashboard-card {
   background: var(--color-white);
-  border-radius: 16px;
-  padding: 2.5rem 3rem;
-  width: 420px;
+  border: 2px solid var(--color-primary);
+  border-radius: 20px;
+  padding: 3rem 3.5rem;
+  width: 460px;
   text-align: center;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
 }
 
-/* BUTTONS */
-.action-btn {
-  width: 100%;
-  padding: 1rem 0;
-  font-size: 20px;
-  font-weight: 500;
-
+/* TITLE */
+.welcome-title {
+  font-size: 36px;
+  font-weight: 600;
   color: var(--color-primary);
-  background: var(--color-white);
-  border: 2px solid var(--color-border);
-
-  border-radius: 12px;
-  cursor: pointer;
+  margin-bottom: 1.5rem;
 }
 
+/* BUTTONS */
+.action-btn {
+  background-color: var(--color-warm);
+  color: var(--color-white);
+  font-size: 18px;
+  font-weight: 600;
+
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
 .action-btn:hover {
-  background: var(--color-border);
+  opacity: 0.95;
 }
 </style>
