@@ -59,7 +59,7 @@
         </div>
 
         <div class="job-actions">
-          <button class="apply-btn" @click="applyToJob(job)">
+          <button v-if="activeTab !== 'applied'" class="apply-btn" @click="applyToJob(job)">
             Apply Now
           </button>
 
@@ -74,7 +74,6 @@
 
   </div>
 </template>
-
 <script>
 import jobsApi from "@/apis/jobApi.js";
 
@@ -126,10 +125,48 @@ export default {
             location: job.location
           }));
 
-          // force UI update
           this.activeTab = "all";
         })
         .catch(err => console.error("Failed to load all jobs:", err));
+    },
+
+    /* ---------------------------
+       APPLY TO JOB (BACKEND CALL)
+    ----------------------------*/
+    applyToJob(job) {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        alert("You must be logged in to apply.");
+        return;
+      }
+
+      // FRONTEND PREVENTION: already applied?
+      if (this.hasApplied(job)) {
+        alert("You already applied to this job.");
+        return;
+      }
+
+      jobsApi.post(`/${job.id}/apply`, null, {
+        headers: { "x-user-id": userId }
+      })
+        .then(() => {
+          alert("Applied successfully!");
+          this.fetchAppliedJobs(); // refresh applied list
+        })
+        .catch(err => {
+          if (err.response?.status === 400) {
+            alert("You already applied to this job.");
+          } else if (err.response?.status === 403) {
+            alert("You must upload a resume first.");
+          } else {
+            alert("Failed to apply to job.");
+          }
+          console.error("Apply failed:", err);
+        });
+    },
+    hasApplied(job) {
+      return this.appliedJobs.some(applied => applied.id === job.id);
     },
 
     toggleSave(job) {
@@ -143,28 +180,24 @@ export default {
     isSaved(job) {
       return this.savedJobs.some(j => j.id === job.id);
     },
+
     fetchAppliedJobs() {
-      
       const userId = localStorage.getItem("userId");
-      console.log("######")
-      console.log(userId)
+
       jobsApi.get("/applied", {
         headers: { "x-user-id": userId }
       })
-      .then(res => {
-        this.appliedJobs = res.data.map(job => ({
-          id: job.id,
-          title: job.title,
-          company: "Unknown Company",
-          location: job.location
-        }));
-
-        this.activeTab = "applied";
-      })
-      .catch(err => console.error("Failed to load applied jobs:", err));
-      }
-      }
-
+        .then(res => {
+          this.appliedJobs = res.data.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: "Unknown Company",
+            location: job.location
+          }));
+        })
+        .catch(err => console.error("Failed to load applied jobs:", err));
+    }
+  }
 };
 </script>
 
