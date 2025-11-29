@@ -226,10 +226,8 @@ export default {
     },
 
     async saveResume() {
-      console.log("@@@@@@@@@@@@@@@@@@@@@@")
       try {
         const userId = localStorage.getItem("userId");
-        console.log(this.form)
         if (this.mode === "edit") {
           await resumeApi.put(`/resumes/${this.existingResumeId}`, this.form);
           alert("Resume updated!");

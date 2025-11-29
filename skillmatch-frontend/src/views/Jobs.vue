@@ -56,16 +56,6 @@
 
           <p class="company">{{ job.company }}</p>
           <p class="location">{{ job.location }}</p>
-
-          <div class="tags">
-            <span 
-              v-for="tag in job.tags" 
-              :key="tag" 
-              class="tag"
-            >
-              {{ tag }}
-            </span>
-          </div>
         </div>
 
         <div class="job-actions">
@@ -86,34 +76,18 @@
 </template>
 
 <script>
+import jobsApi from "@/apis/jobApi.js";
+
 export default {
   data() {
     return {
       activeTab: "all",
-
-      // Replace with backend value later
       resumeUploaded: true,
 
-      // Mock job lists (replace with real backend later)
-      allJobs: [
-        { id: 1, title: "Software Engineer", company: "Tech Solutions", location: "$120,000 – 140,000", tags: [] },
-        { id: 2, title: "Marketing Manager", company: "Creative Agency", location: "San Francisco, CA", tags: [] },
-        { id: 3, title: "Data Analyst", company: "Finance Corp", location: "$90,000", tags: ["Azure", "AWS"] },
-        { id: 4, title: "Product Designer", company: "Innovate Ltd.", location: "Austin, TX", tags: ["Ruby", "Rails"] },
-      ],
-
-      recommendedJobs: [
-        { id: 5, title: "Machine Learning Engineer", company: "AI Labs", location: "Remote", tags: ["Python", "TensorFlow"] },
-        { id: 6, title: "Backend Developer", company: "Cloud Corp", location: "$100,000", tags: ["Go", "Docker"] }
-      ],
-
-      savedJobs: [
-        { id: 7, title: "UI/UX Designer", company: "Designify", location: "New York, NY", tags: ["Figma", "UX"] }
-      ],
-
-      appliedJobs: [
-        { id: 8, title: "Frontend Developer", company: "WebStars", location: "$85,000", tags: ["Vue", "CSS"] }
-      ]
+      allJobs: [],
+      recommendedJobs: [],
+      savedJobs: [],
+      appliedJobs: []
     };
   },
 
@@ -129,89 +103,68 @@ export default {
     }
   },
 
-  methods: {
+  mounted() {
+    this.fetchAllJobs();
+    this.fetchAppliedJobs();
+  },
 
-    /* ==============================
-       TAB SWITCHING (FUTURE DYNAMIC)
-    =============================== */
+  methods: {
     switchTab(tab) {
       this.activeTab = tab;
 
-      // Example backend logic:
-      // if (tab === "all") this.fetchAllJobs();
-      // if (tab === "recommended") this.fetchRecommendedJobs();
-      // if (tab === "saved") this.fetchSavedJobs();
-      // if (tab === "applied") this.fetchAppliedJobs();
+      if (tab === "all") this.fetchAllJobs();
+      if (tab === "applied") this.fetchAppliedJobs();
     },
 
+    fetchAllJobs() {
+      jobsApi.get("")
+        .then(res => {
+          this.allJobs = res.data.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: "Unknown Company",
+            location: job.location
+          }));
 
-    /* ==============================
-       APPLY TO JOB (FUTURE BACKEND)
-    =============================== */
-    applyToJob(job) {
-      console.log("Applying to job:", job);
-
-      // Future backend call:
-      // await axios.post("/api/jobs/apply", { jobId: job.id });
-      // this.fetchAppliedJobs();
+          // force UI update
+          this.activeTab = "all";
+        })
+        .catch(err => console.error("Failed to load all jobs:", err));
     },
 
-
-    /* =====================================
-       SAVE / UNSAVE JOB (FUTURE BACKEND)
-    ===================================== */
     toggleSave(job) {
-      // If job is already saved → remove it
       if (this.isSaved(job)) {
         this.savedJobs = this.savedJobs.filter(j => j.id !== job.id);
-
-        // Future backend call:
-        // await axios.delete(`/api/jobs/saved/${job.id}`);
-      }
-
-      // Otherwise → add it
-      else {
+      } else {
         this.savedJobs.push(job);
-
-        // Future backend call:
-        // await axios.post(`/api/jobs/saved`, { jobId: job.id });
       }
     },
 
     isSaved(job) {
       return this.savedJobs.some(j => j.id === job.id);
     },
-
-
-    /* =============================================
-       BACKEND FETCH FUNCTIONS (PLACEHOLDERS)
-    ============================================= */
-    fetchAllJobs() {
-      // Future:
-      // this.allJobs = await axios.get('/api/jobs/all')
-    },
-
-    fetchRecommendedJobs() {
-      // Future:
-      // this.recommendedJobs = await axios.get('/api/jobs/recommended')
-    },
-
-    fetchSavedJobs() {
-      // Future:
-      // this.savedJobs = await axios.get('/api/jobs/saved')
-    },
-
     fetchAppliedJobs() {
-      // Future:
-      // this.appliedJobs = await axios.get('/api/jobs/applied')
-    },
+      
+      const userId = localStorage.getItem("userId");
+      console.log("######")
+      console.log(userId)
+      jobsApi.get("/applied", {
+        headers: { "x-user-id": userId }
+      })
+      .then(res => {
+        this.appliedJobs = res.data.map(job => ({
+          id: job.id,
+          title: job.title,
+          company: "Unknown Company",
+          location: job.location
+        }));
 
-    fetchResumeStatus() {
-      // Future:
-      // const res = await axios.get('/api/user/resume-status')
-      // this.resumeUploaded = res.data.uploaded
-    }
-  }
+        this.activeTab = "applied";
+      })
+      .catch(err => console.error("Failed to load applied jobs:", err));
+      }
+      }
+
 };
 </script>
 

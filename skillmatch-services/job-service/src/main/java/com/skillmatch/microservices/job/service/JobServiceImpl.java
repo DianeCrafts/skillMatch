@@ -69,4 +69,9 @@ public class JobServiceImpl implements JobService {
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
+
+    @Override
+    public List<Job> getJobsByRecruiter(Long recruiterId) {
+        return jobRepository.findByRecruiterId(recruiterId);
+    }
 }

@@ -2,6 +2,7 @@ package com.skillmatch.microservices.job.controller;
 
 import com.skillmatch.microservices.job.Dto.CreateJobRequest;
 import com.skillmatch.microservices.job.Dto.JobResponse;
+import com.skillmatch.microservices.job.Dto.UpdateJobRequest;
 import com.skillmatch.microservices.job.model.JobApplication;
 import com.skillmatch.microservices.job.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -95,4 +96,88 @@ public class JobController {
 
         return ResponseEntity.ok(response);
     }
+
+
+
+    @GetMapping("/recruiter")
+    public ResponseEntity<List<JobResponse>> getJobsByRecruiter(
+            @RequestHeader("X-User-Id") Long recruiterId) {
+
+        List<Job> jobs = jobService.getJobsByRecruiter(recruiterId);
+
+        List<JobResponse> responses = jobs.stream()
+                .map(job -> new JobResponse(
+                        job.getId(),
+                        job.getTitle(),
+                        job.getDescription(),
+                        job.getRequirements(),
+                        job.getLocation(),
+                        job.getSalary(),
+                        job.getExperience(),
+                        job.getSkills(),
+                        job.isRemote()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(responses);
+    }
+
+    /** UPDATE A JOB */
+    @PutMapping("/{id}")
+    public ResponseEntity<JobResponse> updateJob(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long recruiterId,
+            @RequestBody UpdateJobRequest request) {
+
+        Job updated = jobService.updateJob(id, request);
+
+        JobResponse response = new JobResponse(
+                updated.getId(),
+                updated.getTitle(),
+                updated.getDescription(),
+                updated.getRequirements(),
+                updated.getLocation(),
+                updated.getSalary(),
+                updated.getExperience(),
+                updated.getSkills(),
+                updated.isRemote()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    /** DELETE A JOB */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteJob(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long recruiterId) {
+
+        jobService.deleteJob(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/applied")
+    public ResponseEntity<List<JobResponse>> getAppliedJobs(
+            @RequestHeader("X-User-Id") Long userId) {
+
+        List<Job> jobs = applicationService.getJobsAppliedByUser(userId);
+
+        List<JobResponse> responses = jobs.stream()
+                .map(job -> new JobResponse(
+                        job.getId(),
+                        job.getTitle(),
+                        job.getDescription(),
+                        job.getRequirements(),
+                        job.getLocation(),
+                        job.getSalary(),
+                        job.getExperience(),
+                        job.getSkills(),
+                        job.isRemote()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(responses);
+    }
+
+
 }

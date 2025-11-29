@@ -13,6 +13,7 @@ import ResumeForm from "@/views/ResumeForm.vue";
 /* RECRUITER PAGES */
 import RecruiterDashboard from "../views/RecruiterDashboard.vue";
 import PostJob from "../views/PostJob.vue";
+import EditJob from "../views/EditJob.vue";
 import MyJobs from "../views/MyJobs.vue";
 const routes = [
   /* PUBLIC */
@@ -30,6 +31,7 @@ const routes = [
   /* RECRUITER */
   { path: "/recruiter-dashboard", component: RecruiterDashboard },
   { path: "/post-job", component: PostJob },
+  { path: "/edit-job", component: EditJob },
   { path: "/recruiter/my-jobs", component: MyJobs },
   { path: "/recruiter/applicants/:jobId", component: JobApplicants, props: true },
   /* 404 fallback */

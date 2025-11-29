@@ -54,24 +54,50 @@
 
   </div>
 </template>
-
 <script>
+import jobsApi from "@/apis/jobApi.js";
+
 export default {
   data() {
     return {
-      jobs: [
-        { id: 1, title: "Software Engineer", applicants: 12, status: "Open" },
-        { id: 2, title: "Marketing Manager", applicants: 8, status: "Open" },
-        { id: 3, title: "UI/UX Designer", applicants: 5, status: "Closed" },
-        { id: 4, title: "Data Analyst", applicants: 15, status: "Open" }
-      ]
+      jobs: [] // dynamic list from backend
     };
   },
 
+  mounted() {
+    this.fetchJobs();
+  },
+
   methods: {
+    fetchJobs() {
+      const recruiterId = localStorage.getItem("userId");
+
+      jobsApi.get("/recruiter", {
+        headers: {
+          "x-user-id": recruiterId,
+          "accept": "*/*",
+          "content-type": "application/json"
+        }
+      })
+      .then(res => {
+        console.log("Jobs from backend:", res.data);
+
+        // Map backend job format to frontend table format
+        this.jobs = res.data.map(job => ({
+          id: job.id,
+          title: job.title,
+          applicants: job.applicants ?? 0,   
+          status: job.status ?? "Open"       
+        }));
+      })
+      .catch(err => {
+        console.error("Failed to load jobs:", err);
+        alert("Could not load your jobs.");
+      });
+    },
+
     goToJob(id) {
-      // Future edit page
-      alert("Edit job " + id + " (mock)");
+      this.$router.push({ path: "/edit-job", query: { id }});
     },
 
     viewApplicants(id) {
@@ -79,9 +105,29 @@ export default {
     },
 
     deleteJob(id) {
-      this.jobs = this.jobs.filter(j => j.id !== id);
-      alert("Job deleted (mock)");
+      const recruiterId = localStorage.getItem("userId");
+
+      if (!confirm("Are you sure you want to delete this job?")) {
+        return;
+      }
+
+      jobsApi.delete(`/${id}`, {
+        headers: {
+          "x-user-id": recruiterId,
+          "accept": "*/*",
+          "content-type": "application/json"
+        }
+      })
+      .then(() => {
+        this.jobs = this.jobs.filter(j => j.id !== id);
+        alert("Job deleted successfully.");
+      })
+      .catch(err => {
+        console.error("Failed to delete job:", err);
+        alert("Could not delete the job.");
+      });
     }
+
   }
 };
 </script>
@@ -110,24 +156,32 @@ export default {
   width: 750px;
 }
 
-/* Row layout */
+/* Table row layout */
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 1fr 1fr 1fr 1.5fr;
   padding: 1rem;
+  align-items: center;   
+}
+
+/* Header row */
+.header {
+  background: #FFF9F3; 
+  font-weight: 700;
+  color: #305669;
+  padding: 1rem;         
+  border-bottom: 2px solid #e3d7ce;
+  margin-bottom: 0.5rem;
+  box-shadow: none !important;
+  border-radius: 0 !important; 
+}
+
+/* Data rows */
+.table-row:not(.header) {
   background: white;
   border-radius: 12px;
   margin-bottom: 1rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-
-.header {
-  font-weight: 600;
-  color: #305669;
-  background: none;
-  box-shadow: none;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.3rem;
 }
 
 .col {

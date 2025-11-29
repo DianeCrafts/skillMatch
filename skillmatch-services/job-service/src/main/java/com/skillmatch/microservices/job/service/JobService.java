@@ -13,4 +13,6 @@ public interface JobService {
     void deleteJob(Long id);
     Job getJob(Long id);
     List<Job> getAllJobs();
+    List<Job> getJobsByRecruiter(Long recruiterId);
+
 }

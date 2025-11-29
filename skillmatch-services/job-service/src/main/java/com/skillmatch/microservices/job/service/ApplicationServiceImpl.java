@@ -1,12 +1,13 @@
 package com.skillmatch.microservices.job.service;
 
-import com.skillmatch.microservices.job.Dto.ResumeData;
+import com.skillmatch.microservices.job.Dto.ResumeDTO;
 import com.skillmatch.microservices.job.Dto.SkillData;
 import com.skillmatch.microservices.job.exception.JobNotFoundException;
 import com.skillmatch.microservices.job.model.Job;
 import com.skillmatch.microservices.job.model.JobApplication;
 import com.skillmatch.microservices.job.repository.JobApplicationRepository;
 import com.skillmatch.microservices.job.repository.JobRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final JobRepository jobRepository;
     private final JobApplicationRepository applicationRepository;
     private final ResumeClient resumeClient;
-
+    private final HttpServletRequest request;
     @Override
     public JobApplication applyToJob(Long jobId, Long userId) {
 
@@ -28,9 +29,11 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(() -> new JobNotFoundException(jobId));
 
         // Fetch parsed resume from Resume Service
-        ResumeData resume = resumeClient.getResumeByUserId(userId);
+        String token = request.getHeader("Authorization");
 
-        if (resume == null || resume.getSkills() == null) {
+        ResumeDTO resume = resumeClient.getResumeByUserId(token, userId);
+
+        if (resume == null || resume.skills() == null) {
             throw new RuntimeException("User has no parsed resume uploaded");
         }
 
@@ -38,8 +41,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         // Count skill matches
         int matches = 0;
-        for (SkillData skill : resume.getSkills()) {
-            if (jobSkills.contains(skill.getName())) {
+        for (String skill : resume.skills()) {
+            if (jobSkills.contains(skill)) {
                 matches++;
             }
         }
@@ -52,10 +55,25 @@ public class ApplicationServiceImpl implements ApplicationService {
         JobApplication app = new JobApplication();
         app.setJobId(jobId);
         app.setUserId(userId);
-        app.setResumeId(resume.getId());  // ✔ resumeId is now Long
+        app.setResumeId(resume.id());
         app.setMatchScore(score);
 
         return applicationRepository.save(app);
     }
+    @Override
+    public List<Job> getJobsAppliedByUser(Long userId) {
+
+        // find all applications by this user
+        List<JobApplication> apps = applicationRepository.findByUserId(userId);
+
+        // get job IDs
+        List<Long> jobIds = apps.stream()
+                .map(JobApplication::getJobId)
+                .toList();
+
+        // fetch jobs
+        return jobRepository.findAllById(jobIds);
+    }
+
 }
 
