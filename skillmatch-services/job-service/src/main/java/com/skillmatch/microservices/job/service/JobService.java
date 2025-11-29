@@ -1,9 +1,7 @@
 package com.skillmatch.microservices.job.service;
 
-import com.skillmatch.microservices.job.Dto.CreateJobRequest;
-import com.skillmatch.microservices.job.Dto.UpdateJobRequest;
-import org.springframework.stereotype.Service;
-import com.skillmatch.microservices.job.repository.JobRepository;
+import com.skillmatch.microservices.job.dto.CreateJobRequest;
+import com.skillmatch.microservices.job.dto.UpdateJobRequest;
 import com.skillmatch.microservices.job.model.Job;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.skillmatch.microservices.job.Dto;
+package com.skillmatch.microservices.job.dto;
 
 import java.util.List;
 

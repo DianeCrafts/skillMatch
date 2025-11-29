@@ -1,6 +1,6 @@
 package com.skillmatch.microservices.job.service;
 
-import com.skillmatch.microservices.job.Dto.ResumeDTO;
+import com.skillmatch.microservices.job.dto.ResumeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,4 +29,14 @@ public class ResumeClient {
         return response.getBody();
     }
 
+    public String getUserName(String token, Long userId) {
+        String url = "http://localhost:8082/api/resumes/user/" + userId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResumeDTO resume = restTemplate.exchange(url, HttpMethod.GET, entity, ResumeDTO.class).getBody();
+        return resume != null ? resume.name() : "Unknown";
+    }
 }

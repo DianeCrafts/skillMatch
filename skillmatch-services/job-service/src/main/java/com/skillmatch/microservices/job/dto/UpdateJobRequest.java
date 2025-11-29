@@ -1,12 +1,9 @@
-package com.skillmatch.microservices.job.Dto;
-import lombok.AllArgsConstructor;
+package com.skillmatch.microservices.job.dto;
 import lombok.Data;
 
 import java.util.List;
 @Data
-@AllArgsConstructor
-public class JobResponse {
-    private Long id;
+public class UpdateJobRequest {
     private String title;
     private String description;
 //    private String companyName;

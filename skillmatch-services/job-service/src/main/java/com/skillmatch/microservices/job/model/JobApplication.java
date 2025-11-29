@@ -23,6 +23,6 @@ public class JobApplication {
     private Long resumeId;
 
     private Double matchScore;
-
+    private String status = "Reviewed";
     private LocalDateTime appliedAt = LocalDateTime.now();
 }

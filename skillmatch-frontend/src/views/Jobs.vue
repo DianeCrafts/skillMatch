@@ -76,6 +76,7 @@
 </template>
 <script>
 import jobsApi from "@/apis/jobApi.js";
+import applicationApi from "@/apis/applicationApi.js";
 
 export default {
   data() {
@@ -147,7 +148,7 @@ export default {
         return;
       }
 
-      jobsApi.post(`/${job.id}/apply`, null, {
+      applicationApi.post(`/${job.id}/apply`, null, {
         headers: { "x-user-id": userId }
       })
         .then(() => {
@@ -184,7 +185,7 @@ export default {
     fetchAppliedJobs() {
       const userId = localStorage.getItem("userId");
 
-      jobsApi.get("/applied", {
+      applicationApi.get("/applied", {
         headers: { "x-user-id": userId }
       })
         .then(res => {

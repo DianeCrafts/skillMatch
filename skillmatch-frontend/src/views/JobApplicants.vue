@@ -8,7 +8,7 @@
       <div class="table-row header">
         <div class="col">Applicant</div>
         <div class="col">Resume</div>
-        <div class="col">Rating</div>
+        <div class="col">Match</div>
         <div class="col">Status</div>
       </div>
 
@@ -16,26 +16,30 @@
       <div
         class="table-row"
         v-for="applicant in applicants"
-        :key="applicant.id"
+        :key="applicant.applicationId"
       >
         <!-- Name -->
-        <div class="col">{{ applicant.name }}</div>
+        <div class="col">{{ applicant.userName }}</div>
 
         <!-- Resume -->
         <div class="col">
-          <button class="resume-btn" @click="viewResume(applicant)">
+          <button class="resume-btn" @click="viewResume(applicant.resumeId)">
             View Resume
           </button>
         </div>
 
-        <!-- Stars -->
+        <!-- Match Score as stars -->
         <div class="col stars">
-          <span v-for="n in applicant.rating" :key="n">⭐</span>
+          <span v-for="n in convertScoreToStars(applicant.matchScore)" :key="n">⭐</span>
         </div>
 
         <!-- Status Dropdown -->
         <div class="col">
-          <select class="status-select" v-model="applicant.status" @change="updateStatus(applicant)">
+          <select
+            class="status-select"
+            v-model="applicant.status"
+            @change="updateStatus(applicant)"
+          >
             <option value="Reviewed">Reviewed</option>
             <option value="Shortlisted">Shortlisted</option>
             <option value="Rejected">Rejected</option>
@@ -49,33 +53,62 @@
 </template>
 
 <script>
+import applicationApi from "@/apis/applicationApi.js";
+
 export default {
   data() {
     return {
-      applicants: [
-        { id: 1, name: "Jane Doe", rating: 5, status: "Reviewed" },
-        { id: 2, name: "John Smith", rating: 4, status: "Shortlisted" },
-        { id: 3, name: "Sarah Brown", rating: 5, status: "Rejected" },
-        { id: 4, name: "Michael Johnson", rating: 5, status: "Reviewed" }
-      ]
+      applicants: []
     };
   },
 
+  mounted() {
+    this.fetchApplicants();
+  },
+
   methods: {
-    viewResume(applicant) {
-      console.log("Viewing resume for", applicant);
+    /* --------------------------------------------
+       FETCH APPLICANTS FOR THIS JOB
+    --------------------------------------------- */
+    fetchApplicants() {
+      const jobId = this.$route.params.jobId;
 
-      // FUTURE BACKEND:
-      // window.open(applicant.resumeUrl, "_blank");
-
-      alert("Resume popup coming soon! (mock)");
+      applicationApi.get(`/job/${jobId}`)
+        .then(res => {
+          this.applicants = res.data;
+        })
+        .catch(err => {
+          console.error("Failed to load applicants:", err);
+          alert("Could not load applicants.");
+        });
     },
 
-    updateStatus(applicant) {
-      console.log("Updated status:", applicant);
+    /* Convert 0–100 score to 0–5 stars */
+    convertScoreToStars(score) {
+      return Math.round(score / 20);
+    },
 
-      // FUTURE:
-      // await axios.post(`/api/applicants/${applicant.id}/status`, { status: applicant.status });
+    /* --------------------------------------------
+       VIEW RESUME (opens resume-view/:id page)
+    --------------------------------------------- */
+    viewResume(resumeId) {
+      this.$router.push(`/resume-view/${resumeId}`);
+    },
+
+    /* --------------------------------------------
+       UPDATE STATUS (PUT to backend)
+    --------------------------------------------- */
+    updateStatus(applicant) {
+      applicationApi.put(`/${applicant.applicationId}/status`, {
+        status: applicant.status
+      })
+        .then(() => {
+          console.log("Status updated:", applicant);
+        })
+        .catch(err => {
+          console.error("Failed to update status:", err);
+          alert("Could not update applicant status.");
+        });
     }
   }
 };

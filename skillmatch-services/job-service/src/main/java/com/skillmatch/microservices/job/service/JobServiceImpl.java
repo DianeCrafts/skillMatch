@@ -1,56 +1,32 @@
 package com.skillmatch.microservices.job.service;
 
-import com.skillmatch.microservices.job.Dto.CreateJobRequest;
-import com.skillmatch.microservices.job.Dto.UpdateJobRequest;
+import com.skillmatch.microservices.job.dto.CreateJobRequest;
+import com.skillmatch.microservices.job.dto.UpdateJobRequest;
 import com.skillmatch.microservices.job.exception.JobNotFoundException;
+import com.skillmatch.microservices.job.mapper.JobMapper;
 import com.skillmatch.microservices.job.model.Job;
 import com.skillmatch.microservices.job.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final JobMapper jobMapper;
 
     @Override
     public Job createJob(Long recruiterId, CreateJobRequest request) {
-
-        Job job = new Job();
-        job.setRecruiterId(recruiterId);
-        job.setTitle(request.getTitle());
-        job.setDescription(request.getDescription());
-
-        job.setRequirements(request.getRequirements());
-        job.setLocation(request.getLocation());
-        job.setSalary(request.getSalary());
-        job.setExperience(request.getExperience());
-        job.setSkills(request.getSkills());
-
-        job.setRemote(request.isRemote());
-
+        Job job = jobMapper.fromCreateRequest(request, recruiterId);
         return jobRepository.save(job);
     }
 
     @Override
     public Job updateJob(Long id, UpdateJobRequest request) {
-
         Job job = getJob(id);
-
-        job.setTitle(request.getTitle());
-        job.setDescription(request.getDescription());
-
-        job.setRequirements(request.getRequirements());
-        job.setLocation(request.getLocation());
-        job.setSalary(request.getSalary());
-        job.setExperience(request.getExperience());
-        job.setSkills(request.getSkills());
-
-        job.setRemote(request.isRemote());
-
+        jobMapper.updateJobFromRequest(job, request);
         return jobRepository.save(job);
     }
 
