@@ -66,4 +66,9 @@ public class ResumeService {
         return repo.save(existing);
     }
 
+    public Resume getById(Long resumeId) {
+        return repo.findById(resumeId).orElse(null);
+    }
+
+
 }

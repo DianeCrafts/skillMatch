@@ -1,27 +1,29 @@
 <template>
-  <div class="landing-container">
+  <div class="landing-wrapper">
 
     <NavBar />
 
-    <section class="landing-content">
-      
-      <!-- Text Section -->
-      <div class="left-section">
-        <h1 class="title">
+    <section class="hero">
+
+      <!-- Left Text -->
+      <div class="hero-text">
+        <h1 class="hero-title">
           Find your <br /> perfect match.
         </h1>
 
-        <button class="get-started-btn" @click="$router.push('/login')">
+        <button class="cta-btn" @click="$router.push('/login')">
           Get Started
         </button>
       </div>
 
-      <!-- Illustration -->
-      <img
-        src="/src/assets/landing-illustration.png"
-        alt="Landing illustration"
-        class="illustration"
-      />
+      <!-- Right Illustration -->
+      <div class="hero-image-wrapper">
+        <img
+          src="/src/assets/landing-illustration.png"
+          alt="Landing illustration"
+          class="hero-image"
+        />
+      </div>
 
     </section>
 
@@ -35,58 +37,109 @@ export default {
   components: { NavBar },
 };
 </script>
+
 <style scoped>
-/* Background */
-.landing-container {
+/* -----------------------------
+   Overall Wrapper
+------------------------------ */
+.landing-wrapper {
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
 }
 
-/* Centered Layout */
-.landing-content {
+/* -----------------------------
+   HERO SECTION
+------------------------------ */
+.hero {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 5rem 2rem;
 
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  padding: 4rem 2rem;
+  justify-content: space-between;
   gap: 4rem;
+
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Left side text */
-.left-section {
-  max-width: 450px;
+/* Text */
+.hero-text {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.title {
-  font-size: 64px;
+.hero-title {
+  font-size: clamp(42px, 5vw, 70px);
   line-height: 1.1;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  color: var(--color-primary); /* main theme color */
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
-/* Button */
-.get-started-btn {
-  padding: 1rem 2.5rem;
-  font-size: 20px;
+/* CTA Button */
+.cta-btn {
+  padding: 1rem 2.8rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-white);
   background-color: var(--color-accent);
+
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
-.get-started-btn:hover {
-  opacity: 0.8;
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* Illustration */
-.illustration {
-  width: 520px;
+/* -----------------------------
+   HERO IMAGE
+------------------------------ */
+.hero-image-wrapper {
+  flex-shrink: 0;
+}
+
+.hero-image {
+  width: 540px;
   max-width: 100%;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* -----------------------------
+   Animations
+------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* -----------------------------
+   Mobile Responsive
+------------------------------ */
+@media (max-width: 880px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding-top: 3rem;
+  }
+
+  .hero-text {
+    align-items: center;
+  }
 }
 </style>

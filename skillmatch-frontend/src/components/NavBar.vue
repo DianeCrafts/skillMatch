@@ -1,77 +1,108 @@
 <template>
   <nav class="navbar">
     <div class="navbar-inner">
-      <h1 class="logo">SkillMatch</h1>
+
+      <h1 class="logo" @click="$router.push('/')">SkillMatch</h1>
 
       <div class="nav-buttons">
         <button class="login-btn" @click="$router.push('/login')">Login</button>
         <button class="register-btn" @click="$router.push('/register')">Register</button>
       </div>
+
     </div>
   </nav>
 </template>
 
 <style scoped>
-/* Full-width navbar background */
+/* -----------------------------
+   NAVBAR WRAPPER
+------------------------------ */
 .navbar {
   width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  background-color: var(--color-white);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-/* Navbar inner container — matches landing page width */
+/* -----------------------------
+   NAVBAR INNER LAYOUT
+------------------------------ */
 .navbar-inner {
-  max-width: 1200px;   /* keeps everything centered */
-  margin: 0 auto;      /* center horizontally */
-  padding: 20px 40px;  /* spacing so buttons don't touch edges */
+  max-width: 1200px;
+  margin: 0 auto;
 
+  padding: 18px 40px;
   display: flex;
   align-items: center;
 }
 
-/* LOGO on the left */
+/* -----------------------------
+   LOGO
+------------------------------ */
 .logo {
-  font-size: 26px;
-  font-weight: 600;
-  color: #305669;
-  margin-right: auto; /* pushes buttons to far right */
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-right: auto;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* Button wrapper on right side */
+.logo:hover {
+  opacity: 0.75;
+}
+
+/* -----------------------------
+   NAV BUTTONS
+------------------------------ */
 .nav-buttons {
   display: flex;
   align-items: center;
-  gap: 24px;  /* spacing between login/register buttons */
+  gap: 22px;
 }
 
-/* LOGIN BUTTON (simple text, no background) */
+/* -----------------------------
+   LOGIN BUTTON (simple link-style)
+------------------------------ */
 .login-btn {
   background: none;
-  color: #305669;
+  border: none;
+
+  color: var(--color-primary);
   font-size: 16px;
   font-weight: 500;
-  border: none;
+
   cursor: pointer;
-  padding: 10px 24px;
+  padding: 8px 16px;
+  transition: 0.2s ease;
 }
 
 .login-btn:hover {
   text-decoration: underline;
 }
 
-/* REGISTER BUTTON (primary button) */
+/* -----------------------------
+   REGISTER BUTTON
+------------------------------ */
 .register-btn {
-  background-color: #C1785A;
-  color: white;
+  background-color: var(--color-warm);
+  color: var(--color-white);
+
+  padding: 10px 26px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+
   border: none;
-  padding: 10px 28px;
-  border-radius: 8px;
+  border-radius: 10px;
+
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .register-btn:hover {
-  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0,0,0,0.12);
 }
 </style>

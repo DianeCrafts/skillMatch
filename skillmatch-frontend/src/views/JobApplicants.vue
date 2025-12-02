@@ -1,5 +1,6 @@
 <template>
   <div class="applicants-page">
+
     <h1 class="title">Job Applicants</h1>
 
     <div class="applicants-table">
@@ -14,26 +15,28 @@
 
       <!-- Applicant Rows -->
       <div
-        class="table-row"
+        class="table-row applicant-row"
         v-for="applicant in applicants"
         :key="applicant.applicationId"
       >
         <!-- Name -->
-        <div class="col">{{ applicant.userName }}</div>
+        <div class="col name-col">
+          {{ applicant.userName }}
+        </div>
 
-        <!-- Resume -->
+        <!-- Resume Button -->
         <div class="col">
           <button class="resume-btn" @click="viewResume(applicant.resumeId)">
             View Resume
           </button>
         </div>
 
-        <!-- Match Score as stars -->
+        <!-- Stars -->
         <div class="col stars">
           <span v-for="n in convertScoreToStars(applicant.matchScore)" :key="n">⭐</span>
         </div>
 
-        <!-- Status Dropdown -->
+        <!-- Status Select -->
         <div class="col">
           <select
             class="status-select"
@@ -49,6 +52,7 @@
       </div>
 
     </div>
+
   </div>
 </template>
 
@@ -67,9 +71,6 @@ export default {
   },
 
   methods: {
-    /* --------------------------------------------
-       FETCH APPLICANTS FOR THIS JOB
-    --------------------------------------------- */
     fetchApplicants() {
       const jobId = this.$route.params.jobId;
 
@@ -83,105 +84,162 @@ export default {
         });
     },
 
-    /* Convert 0–100 score to 0–5 stars */
     convertScoreToStars(score) {
       return Math.round(score / 20);
     },
 
-    /* --------------------------------------------
-       VIEW RESUME (opens resume-view/:id page)
-    --------------------------------------------- */
     viewResume(resumeId) {
       this.$router.push(`/resume-view/${resumeId}`);
     },
 
-    /* --------------------------------------------
-       UPDATE STATUS (PUT to backend)
-    --------------------------------------------- */
     updateStatus(applicant) {
       applicationApi.put(`/${applicant.applicationId}/status`, {
         status: applicant.status
       })
-        .then(() => {
-          console.log("Status updated:", applicant);
-        })
-        .catch(err => {
-          console.error("Failed to update status:", err);
-          alert("Could not update applicant status.");
-        });
+      .catch(err => {
+        console.error("Failed to update status:", err);
+        alert("Could not update applicant status.");
+      });
     }
   }
 };
 </script>
 
 <style scoped>
+/* --------------------------------
+   PAGE
+----------------------------------- */
 .applicants-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
+  background: var(--color-bg);
+
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  animation: fadeIn 0.4s ease;
 }
 
 /* Title */
 .title {
   font-size: 42px;
-  color: #305669;
+  font-weight: 700;
+  color: var(--color-primary);
   margin-bottom: 2rem;
 }
 
-/* Table container */
+/* --------------------------------
+   TABLE
+----------------------------------- */
 .applicants-table {
   width: 850px;
 }
 
-/* Row layout */
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr 1.3fr;
+  grid-template-columns: 2fr 1.2fr 1fr 1.2fr;
+
   padding: 1.1rem 1rem;
-  background: white;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  align-items: center;
+
+  border-radius: 14px;
 }
 
 .header {
-  font-weight: 600;
-  color: #305669;
-  background: none;
-  box-shadow: none;
-  margin-bottom: 0.3rem;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-primary);
+
+  border-bottom: 2px solid var(--color-border);
+
+  margin-bottom: 0.8rem;
+  background: none !important;
 }
 
-/* Stars */
+/* Applicant rows */
+.applicant-row {
+  background: white;
+
+  margin-bottom: 1rem;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: 0.2s ease;
+}
+
+.applicant-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.col {
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+}
+
+/* --------------------------------
+   STARS
+----------------------------------- */
 .stars span {
   font-size: 20px;
+  color: #E0A800;
 }
 
-/* Resume Button */
+/* --------------------------------
+   RESUME BUTTON
+----------------------------------- */
 .resume-btn {
-  padding: 6px 14px;
-  background-color: #F5F1EE;
-  border: 2px solid #E5DFDA;
+  padding: 8px 18px;
+
+  background-color: white;
+  border: 2px solid var(--color-border);
+
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+
   border-radius: 10px;
   cursor: pointer;
-  color: #305669;
-  font-size: 14px;
+
+  transition: 0.2s ease;
 }
 
 .resume-btn:hover {
-  background-color: #EDE7E4;
+  background-color: #F8F4F1;
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
-/* Status dropdown */
+/* --------------------------------
+   STATUS SELECT
+----------------------------------- */
 .status-select {
-  padding: 6px 10px;
+  width: 100%;
+  padding: 8px 10px;
+
   border-radius: 10px;
-  border: 2px solid #E5DFDA;
-  font-size: 14px;
-  color: #305669;
+  border: 2px solid var(--color-border);
+
+  color: var(--color-primary);
+  font-size: 15px;
+
+  background: white;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.status-select:hover,
+.status-select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(138,190,185,0.25);
+}
+
+/* --------------------------------
+   ANIMATIONS
+----------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 </style>

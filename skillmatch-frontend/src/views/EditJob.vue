@@ -1,7 +1,9 @@
 <template>
-  <div class="post-page">
+  <div class="edit-page">
+
     <h1 class="title">Edit Job</h1>
 
+    <!-- Form Card -->
     <div class="form-card" v-if="jobLoaded">
       <JobForm
         :job="job"
@@ -10,9 +12,11 @@
       />
     </div>
 
+    <!-- Loading -->
     <div v-else class="loading-text">
       Loading job...
     </div>
+
   </div>
 </template>
 
@@ -53,7 +57,6 @@ export default {
         .then(res => {
           const data = res.data;
 
-          // fill job object
           this.job = {
             title: data.title,
             description: data.description,
@@ -94,30 +97,68 @@ export default {
 </script>
 
 <style scoped>
-.post-page {
+/* ------------------------------
+   PAGE STRUCTURE
+------------------------------ */
+.edit-page {
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background: var(--color-bg);
+
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  animation: fadeIn 0.4s ease;
 }
+
+/* ------------------------------
+   TITLE
+------------------------------ */
 .title {
   font-size: 42px;
+  font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 2rem;
 }
+
+/* ------------------------------
+   FORM CARD
+------------------------------ */
 .form-card {
   width: 700px;
-  background: white;
-  border: 2px solid var(--color-primary);
-  border-radius: 16px;
-  padding: 2.5rem 3rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+  background: var(--color-white);
+  border-radius: 18px;
+
+  padding: 2.8rem 3rem;
+
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
+
+  animation: fadeInUp 0.45s ease;
 }
+
+/* ------------------------------
+   LOADING TEXT
+------------------------------ */
 .loading-text {
   font-size: 20px;
-  color: #666;
+  color: var(--color-primary);
   margin-top: 30px;
+  opacity: 0.7;
+}
+
+/* ------------------------------
+   ANIMATIONS
+------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 </style>

@@ -1,14 +1,10 @@
 package com.skillmatch.microservices.job.controller;
 import com.skillmatch.microservices.job.dto.*;
-import com.skillmatch.microservices.job.mapper.JobMapper;
 import com.skillmatch.microservices.job.model.JobApplication;
 import com.skillmatch.microservices.job.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.skillmatch.microservices.job.service.JobService;
-import com.skillmatch.microservices.job.model.Job;
-
 import java.util.List;
 
 @RestController

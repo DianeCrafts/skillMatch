@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 @Entity
 @Table(name = "resumes")
 @Getter
@@ -25,6 +24,15 @@ public class Resume {
 
     @Column(length = 1000)
     private String summary;
+
+    @Column(length = 100)
+    private String name;
+
+    @Column(length = 150)
+    private String email;
+
+    @Column(length = 30)
+    private String phone;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "resume-education")

@@ -1,5 +1,6 @@
 <template>
   <div class="post-page">
+
     <h1 class="title">Post a Job</h1>
 
     <div class="form-card">
@@ -9,6 +10,7 @@
         @submit="submitJob"
       />
     </div>
+
   </div>
 </template>
 
@@ -33,9 +35,7 @@ export default {
       }
     };
   },
-  mounted() {
-    console.log("POST JOB MOUNTED");
-  },
+
   methods: {
     submitJob() {
       const recruiterId = localStorage.getItem("userId");
@@ -61,32 +61,58 @@ export default {
 };
 </script>
 
-
 <style scoped>
-/* PAGE BACKGROUND */
+/* ------------------------------
+   PAGE LAYOUT
+------------------------------ */
 .post-page {
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background: var(--color-bg);
+
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  animation: fadeIn 0.4s ease;
 }
 
-/* TITLE */
+/* ------------------------------
+   TITLE
+------------------------------ */
 .title {
   font-size: 42px;
+  font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 2rem;
 }
 
-/* FORM CARD */
+/* ------------------------------
+   FORM CARD
+------------------------------ */
 .form-card {
   width: 700px;
-  background: white;
-  border: 2px solid var(--color-primary);
-  border-radius: 16px;
-  padding: 2.5rem 3rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  background: var(--color-white);
+
+  border-radius: 18px;
+  padding: 2.8rem 3rem;
+
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid var(--color-border);
+
+  animation: fadeInUp 0.45s ease;
+}
+
+/* ------------------------------
+   ANIMATIONS
+------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 </style>

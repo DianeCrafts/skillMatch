@@ -203,93 +203,130 @@ export default {
 </script>
 
 <style scoped>
-/* SAME CSS AS BEFORE */
+/* GLOBAL RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* PAGE */
 .jobs-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
-  padding: 3rem 0;
+  background-color: var(--color-bg);
+  padding: 3.5rem 1rem;
   display: flex;
   justify-content: center;
+  animation: fadeIn 0.3s ease;
 }
 
+/* MAIN CARD */
 .jobs-card {
-  width: 700px;
+  width: 760px;
   background: white;
-  border-radius: 16px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 20px;
+  padding: 2.6rem 3rem;
+  border: 1px solid var(--color-border);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.4);
 }
 
+/* TITLE */
 .title {
-  font-size: 32px;
-  color: #305669;
-  margin-bottom: 1rem;
+  font-size: 34px;
+  color: var(--color-primary);
+  margin-bottom: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
+/* TABS */
 .tabs {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .tab {
-  background: none;
+  background: transparent;
   border: none;
-  color: #305669;
-  padding-bottom: 6px;
+  padding: 0.55rem 1.2rem;
+  font-size: 15px;
+  color: var(--color-primary);
   cursor: pointer;
-  font-size: 16px;
+  border-radius: 10px;
+  transition: 0.18s;
+  font-weight: 500;
+}
+
+.tab:hover:not(.disabled) {
+  background: rgba(48, 86, 105, 0.08);
 }
 
 .tab.active {
-  border-bottom: 2px solid #305669;
+  background: var(--color-primary);
+  color: white;
   font-weight: 600;
 }
 
 .tab.disabled {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
+/* DIVIDER */
 .divider {
   height: 1px;
-  background: #e4e4e4;
-  margin-bottom: 1rem;
+  background: var(--color-border);
+  margin-bottom: 1.5rem;
 }
 
+/* JOB ITEM */
 .job-item {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
-  padding: 1rem 0;
+  align-items: flex-start;
+
+  padding: 1.3rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+
+  transition: 0.18s;
+}
+
+.job-item:hover {
+  background: rgba(48, 86, 105, 0.03);
+  border-radius: 10px;
+  padding-left: 0.6rem;
+}
+
+/* JOB INFO */
+.job-info {
+  max-width: 70%;
 }
 
 .job-title {
-  font-size: 20px;
-  color: #305669;
-  margin-bottom: 4px;
+  font-size: 21px;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.job-title:hover {
+  text-decoration: underline;
 }
 
 .company,
 .location {
-  font-size: 14px;
-  color: #305669;
+  font-size: 15px;
+  color: var(--color-primary);
+  opacity: 0.85;
 }
 
-.tags {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 6px;
-}
-
-.tag {
-  background-color: #305669;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-}
-
+/* ACTIONS */
 .job-actions {
   display: flex;
   flex-direction: column;
@@ -297,35 +334,50 @@ export default {
   gap: 0.6rem;
 }
 
+/* APPLY BUTTON */
 .apply-btn {
-  background-color: #C1785A;
+  background-color: var(--color-warm);
   color: white;
-  padding: 0.5rem 1.3rem;
-  border-radius: 8px;
+  padding: 0.55rem 1.4rem;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: 0.18s;
 }
 
 .apply-btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
+/* SAVE BUTTON */
 .save-btn {
-  background: none;
-  border: none;
-  font-size: 22px;
+  background: white;
+  border: 2px solid var(--color-primary);
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
-  color: #305669;
+  transition: 0.18s;
+  color: var(--color-primary);
 }
+
 .save-btn:hover {
-  opacity: 0.6;
+  background: var(--color-primary);
+  color: white;
 }
 
-.clickable {
-  cursor: pointer;
+/* FADE-IN ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.clickable:hover {
-  text-decoration: underline;
-}
-
 </style>

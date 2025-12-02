@@ -69,4 +69,13 @@ public class ResumeController {
         return ResponseEntity.ok(service.toDto(updated));
     }
 
+
+    @GetMapping("/{resumeId}")
+    public ResponseEntity<?> getResumeById(@PathVariable Long resumeId) {
+        Resume resume = service.getById(resumeId);
+        return resume != null
+                ? ResponseEntity.ok(service.toDto(resume))
+                : ResponseEntity.notFound().build();
+    }
+
 }

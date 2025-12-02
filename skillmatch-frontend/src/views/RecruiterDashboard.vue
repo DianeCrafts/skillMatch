@@ -1,10 +1,10 @@
 <template>
   <div class="recruiter-page">
 
-    <!-- Logout button -->
-    <button class="logout-btn" @click="logout">Logout</button>
-
     <div class="dashboard-card">
+
+      <!-- Logout inside frame -->
+      <button class="logout-btn" @click="logout">Logout</button>
 
       <h1 class="welcome-title">Welcome, {{ recruiterName }}!</h1>
 
@@ -25,7 +25,7 @@
 export default {
   data() {
     return {
-      recruiterName: localStorage.getItem("userName"),
+      recruiterName: localStorage.getItem("userName")
     };
   },
 
@@ -39,24 +39,44 @@ export default {
 </script>
 
 <style scoped>
-/* PAGE BACKGROUND */
+/* -----------------------------
+   Page Layout
+------------------------------ */
 .recruiter-page {
   min-height: 100vh;
-  background-color: var(--color-bg);
-
+  background: var(--color-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-
-  position: relative; /* for logout absolute positioning */
 }
 
-/* LOGOUT BUTTON */
+/* -----------------------------
+   Card
+------------------------------ */
+.dashboard-card {
+  position: relative;
+  width: 460px;
+  background: var(--color-white);
+  border-radius: 18px;
+  padding: 3rem 3rem;
+  text-align: center;
+
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* -----------------------------
+   Logout Button (Inside Card)
+------------------------------ */
 .logout-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 18px;
+  right: 18px;
 
   background: var(--color-red);
   color: var(--color-white);
@@ -64,41 +84,34 @@ export default {
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
+
   font-size: 14px;
   cursor: pointer;
+  transition: 0.2s ease;
 }
+
 .logout-btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* DASHBOARD CARD */
-.dashboard-card {
-  background: var(--color-white);
-  border: 2px solid var(--color-primary);
-  border-radius: 20px;
-  padding: 3rem 3.5rem;
-  width: 460px;
-  text-align: center;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-}
-
-/* TITLE */
+/* -----------------------------
+   Title
+------------------------------ */
 .welcome-title {
-  font-size: 36px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 1.5rem;
 }
 
-/* BUTTONS */
+/* -----------------------------
+   Buttons
+------------------------------ */
 .action-btn {
-  background-color: var(--color-warm);
+  background: var(--color-warm);
   color: var(--color-white);
+
   font-size: 18px;
   font-weight: 600;
 
@@ -107,8 +120,19 @@ export default {
   border-radius: 10px;
 
   cursor: pointer;
+  transition: 0.25s ease;
 }
+
 .action-btn:hover {
-  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* -----------------------------
+   Animation
+------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

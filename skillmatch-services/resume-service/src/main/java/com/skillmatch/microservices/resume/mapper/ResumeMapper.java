@@ -17,7 +17,9 @@ public class ResumeMapper {
         resume.setUserId(userId);
         resume.setTitle("Extracted Resume");
         resume.setSummary(parsed.summary());
-
+        resume.setName(parsed.name());
+        resume.setEmail(parsed.email());
+        resume.setPhone(parsed.phone());
         // EDUCATION
         if (parsed.education() != null) {
             resume.setEducation(parsed.education().stream().map(edu -> {
@@ -63,9 +65,9 @@ public class ResumeMapper {
         return new ResumeDTO(
                 resume.getId(),
                 resume.getSummary(),
-                null,   // name (if you decide to include)
-                null,   // email
-                null,   // phone
+                resume.getName(),
+                resume.getEmail(),
+                resume.getPhone(),
                 resume.getEducation().stream()
                         .map(e -> new EducationDTO(
                                 e.getInstitution(),
@@ -82,16 +84,17 @@ public class ResumeMapper {
                                 e.getEndDate() != null ? e.getEndDate().toString() : null,
                                 e.getDescription()
                         )).toList(),
-                resume.getSkills().stream()
-                        .map(Skill::getName)
-                        .toList()
+                resume.getSkills().stream().map(Skill::getName).toList()
         );
     }
+
 
     public void mergeIntoExisting(Resume existing, ResumeDTO dto) {
 
         existing.setSummary(dto.summary());
-
+        existing.setName(dto.name());
+        existing.setEmail(dto.email());
+        existing.setPhone(dto.phone());
         // EDUCATION
         existing.getEducation().clear();
         if (dto.education() != null) {

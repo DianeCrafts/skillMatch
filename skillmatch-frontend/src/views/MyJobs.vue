@@ -8,59 +8,55 @@
       <!-- TABLE HEADER -->
       <div class="table-row header">
         <div class="col">Job Title</div>
-        <div class="col"># Applicants</div>
         <div class="col">Status</div>
         <div class="col">Action</div>
       </div>
 
       <!-- JOB ROWS -->
       <div
-        class="table-row"
+        class="table-row job-row"
         v-for="job in jobs"
         :key="job.id"
-        >
+      >
         <div class="col">{{ job.title }}</div>
-        <div class="col">{{ job.applicants }}</div>
         <div class="col">{{ job.status }}</div>
 
         <div class="col action-buttons">
 
-            <!-- Applicants button -->
-            <button 
+          <button 
             class="btn applicants"
             @click="viewApplicants(job.id)"
-            >
+          >
             Applicants
-            </button>
+          </button>
 
-            <!-- Edit/View -->
-            <button
-            class="btn"
+          <button
+            class="btn edit-btn"
             :class="job.status === 'Open' ? 'edit' : 'view'"
             @click="goToJob(job.id)"
-            >
+          >
             {{ job.status === 'Closed' ? 'View' : 'Edit' }}
-            </button>
+          </button>
 
-            <!-- Delete -->
-            <button class="btn delete" @click="deleteJob(job.id)">
+          <button class="btn delete" @click="deleteJob(job.id)">
             Delete
-            </button>
+          </button>
 
         </div>
-        </div>
+      </div>
 
     </div>
 
   </div>
 </template>
+
 <script>
 import jobsApi from "@/apis/jobApi.js";
 
 export default {
   data() {
     return {
-      jobs: [] // dynamic list from backend
+      jobs: []
     };
   },
 
@@ -75,19 +71,16 @@ export default {
       jobsApi.get("/recruiter", {
         headers: {
           "x-user-id": recruiterId,
-          "accept": "*/*",
+          accept: "*/*",
           "content-type": "application/json"
         }
       })
       .then(res => {
-        console.log("Jobs from backend:", res.data);
-
-        // Map backend job format to frontend table format
         this.jobs = res.data.map(job => ({
           id: job.id,
           title: job.title,
-          applicants: job.applicants ?? 0,   
-          status: job.status ?? "Open"       
+          applicants: job.applicants ?? 0,
+          status: job.status ?? "Open"
         }));
       })
       .catch(err => {
@@ -97,7 +90,7 @@ export default {
     },
 
     goToJob(id) {
-      this.$router.push({ path: "/edit-job", query: { id }});
+      this.$router.push({ path: "/edit-job", query: { id } });
     },
 
     viewApplicants(id) {
@@ -107,14 +100,12 @@ export default {
     deleteJob(id) {
       const recruiterId = localStorage.getItem("userId");
 
-      if (!confirm("Are you sure you want to delete this job?")) {
-        return;
-      }
+      if (!confirm("Are you sure you want to delete this job?")) return;
 
       jobsApi.delete(`/${id}`, {
         headers: {
           "x-user-id": recruiterId,
-          "accept": "*/*",
+          accept: "*/*",
           "content-type": "application/json"
         }
       })
@@ -127,17 +118,17 @@ export default {
         alert("Could not delete the job.");
       });
     }
-
   }
 };
 </script>
 
-
 <style scoped>
+/* ------------------------------
+   PAGE LAYOUT
+--------------------------------*/
 .myjobs-page {
   min-height: 100vh;
-  background-color: #FFF9F3;
-
+  background: var(--color-bg);
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
@@ -147,81 +138,100 @@ export default {
 /* Title */
 .title {
   font-size: 42px;
-  color: #305669;
-  margin-bottom: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 2.5rem;
 }
 
-/* Table container */
+/* ------------------------------
+   TABLE WRAPPER
+--------------------------------*/
 .jobs-table {
   width: 750px;
 }
 
-/* Table row layout */
+/* Base row layout */
 .table-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1.5fr;
-  padding: 1rem;
-  align-items: center;   
+  grid-template-columns: 1.3fr 0.9fr 1.3fr;
+  padding: 1.3rem 1.5rem;
+  align-items: center;
 }
 
-/* Header row */
+/* Header */
 .header {
-  background: #FFF9F3; 
+  background: var(--color-bg);
+  color: var(--color-primary);
   font-weight: 700;
-  color: #305669;
-  padding: 1rem;         
-  border-bottom: 2px solid #e3d7ce;
-  margin-bottom: 0.5rem;
-  box-shadow: none !important;
-  border-radius: 0 !important; 
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: 1rem;
 }
 
-/* Data rows */
-.table-row:not(.header) {
+/* Individual job rows */
+.job-row {
   background: white;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  color: var(--color-primary);
+  border-radius: 14px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: 0.2s ease;
+}
+
+.job-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .col {
   display: flex;
   align-items: center;
-  color: #305669;
 }
 
-/* Action buttons inside last column */
+/* ------------------------------
+   ACTION BUTTON GROUP
+--------------------------------*/
 .action-buttons {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  justify-content: flex-start;
 }
 
-/* Buttons */
+/* Button base */
 .btn {
-  padding: 0.4rem 1rem;
+  padding: 0.55rem 1.2rem;
   border-radius: 8px;
   border: none;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  color: white;
+  color: var(--color-white);
+  transition: 0.2s ease;
 }
 
-/* Edit/View button */
+/* Edit / View */
 .edit {
-  background-color: #C1785A;
+  background: var(--color-warm);
 }
 
 .view {
-  background-color: #305669;
+  background: var(--color-primary);
 }
 
-/* Delete button */
-.delete {
-  background-color: #a33c3c;
-}
-
+/* Applicants */
 .applicants {
-  background-color: #305669;
+  background: var(--color-accent);
+  color: var(--color-primary);
 }
 
+/* Delete */
+.delete {
+  background: var(--color-red);
+}
+
+/* Hover effect */
+.btn:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 </style>
