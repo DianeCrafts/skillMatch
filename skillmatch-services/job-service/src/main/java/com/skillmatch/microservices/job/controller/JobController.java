@@ -4,8 +4,7 @@ import com.skillmatch.microservices.job.dto.CreateJobRequest;
 import com.skillmatch.microservices.job.dto.JobResponse;
 import com.skillmatch.microservices.job.dto.UpdateJobRequest;
 import com.skillmatch.microservices.job.mapper.JobMapper;
-import com.skillmatch.microservices.job.model.JobApplication;
-import com.skillmatch.microservices.job.service.ApplicationService;
+import com.skillmatch.microservices.job.service.JobSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +19,7 @@ public class JobController {
 
     private final JobService jobService;
     private final JobMapper jobMapper;
+    private final JobSearchService jobSearchService;
 
     @PostMapping
     public ResponseEntity<JobResponse> createJob(
@@ -73,5 +73,18 @@ public class JobController {
 
         jobService.deleteJob(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<JobResponse>> searchJobs(
+            @RequestParam String keyword
+    ) {
+        List<Job> results = jobSearchService.searchJobs(keyword);
+
+        return ResponseEntity.ok(
+                results.stream()
+                        .map(jobMapper::toResponse)
+                        .toList()
+        );
     }
 }

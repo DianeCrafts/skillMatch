@@ -69,8 +69,6 @@ export default {
 
   mounted() {
     const resumeId = this.$route.params.id;
-    console.log(resumeId)
-    console.log("###########")
     this.fetchResume(resumeId);
   },
 
