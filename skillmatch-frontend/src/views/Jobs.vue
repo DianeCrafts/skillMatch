@@ -41,6 +41,17 @@
       </div>
 
       <div class="divider"></div>
+      <!-- SEARCH BAR -->
+      <div v-if="activeTab === 'all'" class="search-container">
+        <input
+          v-model="searchQuery"
+          @input="handleSearch"
+          type="text"
+          class="search-input"
+          placeholder="Search jobs by title, skills, or keywords..."
+        />
+      </div>
+
 
       <!-- JOB LIST -->
       <div
@@ -87,12 +98,19 @@ export default {
       allJobs: [],
       recommendedJobs: [],
       savedJobs: [],
-      appliedJobs: []
+      appliedJobs: [],
+      searchQuery: "",
+      searchResults: []
+
     };
   },
 
   computed: {
     filteredJobs() {
+      if (this.searchQuery.trim() !== "") {
+        return this.searchResults;
+      }
+
       switch (this.activeTab) {
         case "all": return this.allJobs;
         case "recommended": return this.recommendedJobs;
@@ -101,6 +119,7 @@ export default {
         default: return [];
       }
     }
+
   },
 
   mounted() {
@@ -111,10 +130,38 @@ export default {
   methods: {
     switchTab(tab) {
       this.activeTab = tab;
-
+      // Clear search when leaving All Jobs tab
+      if (tab !== "all") {
+        this.searchQuery = "";
+        this.searchResults = [];
+      }
       if (tab === "all") this.fetchAllJobs();
       if (tab === "applied") this.fetchAppliedJobs();
     },
+    handleSearch() {
+      const q = this.searchQuery.trim();
+
+      // If empty, reset search
+      if (q === "") {
+        this.searchResults = [];
+        return;
+      }
+
+    // Call backend
+    jobsApi.get(`/search?keyword=${encodeURIComponent(q)}`)
+        .then(res => {
+          this.searchResults = res.data.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: job.companyName || "Unknown Company",
+            location: job.location
+          }));
+        })
+        .catch(err => {
+          console.error("Search failed:", err);
+        });
+    },
+
 
     fetchAllJobs() {
       jobsApi.get("")
@@ -374,6 +421,28 @@ export default {
   background: var(--color-primary);
   color: white;
 }
+/* SEARCH BAR */
+.search-container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  outline: none;
+  transition: 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(48, 86, 105, 0.15);
+}
+
 
 /* FADE-IN ANIMATION */
 @keyframes fadeIn {

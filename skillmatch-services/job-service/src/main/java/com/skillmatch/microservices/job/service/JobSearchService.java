@@ -25,7 +25,7 @@ public class JobSearchService {
                             .index("jobs")
                             .query(q -> q
                                     .multiMatch(mm -> mm
-                                            .fields("title^3", "description", "requirements")
+                                            .fields("title^3", "description", "requirements", "location", "skills", "experience")
                                             .query(keyword)
                                     )
                             ),
