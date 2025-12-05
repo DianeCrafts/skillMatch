@@ -87,6 +87,7 @@
 </template>
 <script>
 import jobsApi from "@/apis/jobApi.js";
+import savedJobApi from "@/apis/savedJobApi.js";
 import applicationApi from "@/apis/applicationApi.js";
 
 export default {
@@ -123,6 +124,7 @@ export default {
   mounted() {
     this.fetchAllJobs();
     this.fetchAppliedJobs();
+    this.fetchSavedJobs();
   },
 
   methods: {
@@ -137,6 +139,7 @@ export default {
       if (tab === "all") this.fetchAllJobs();
       if (tab === "applied") this.fetchAppliedJobs();
       if (tab === "recommended") this.fetchRecommendedJobs();
+      if (tab === "saved") this.fetchSavedJobs();
     },
 
     handleSearch() {
@@ -227,16 +230,52 @@ export default {
     },
 
     toggleSave(job) {
+      const userId = localStorage.getItem("userId");
+
       if (this.isSaved(job)) {
-        this.savedJobs = this.savedJobs.filter(j => j.id !== job.id);
+        // UNSAVE
+        savedJobApi.delete(`/${job.id}/unsave`, {
+          headers: { "x-user-id": userId }
+        })
+        .then(() => {
+          this.savedJobs = this.savedJobs.filter(j => j.id !== job.id);
+        })
+        .catch(err => console.error("Failed to unsave job:", err));
       } else {
-        this.savedJobs.push(job);
+        // SAVE
+        console.log("!!!!!!!!!!!!!!!!!!!")
+        savedJobApi.post(`/${job.id}/save`, null, {
+          headers: { "x-user-id": userId }
+        })
+        .then(() => {
+          this.savedJobs.push(job);
+        })
+        .catch(err => console.error("Failed to save job:", err));
       }
     },
+
 
     isSaved(job) {
       return this.savedJobs.some(j => j.id === job.id);
     },
+
+    fetchSavedJobs() {
+      const userId = localStorage.getItem("userId");
+
+      savedJobApi.get("/saved", {
+        headers: { "x-user-id": userId }
+      })
+      .then(res => {
+        this.savedJobs = res.data.map(job => ({
+          id: job.id,
+          title: job.title,
+          company: "Unknown Company",
+          location: job.location
+        }));
+      })
+      .catch(err => console.error("Failed to load saved jobs:", err));
+    },
+
 
     fetchAppliedJobs() {
       const userId = localStorage.getItem("userId");
