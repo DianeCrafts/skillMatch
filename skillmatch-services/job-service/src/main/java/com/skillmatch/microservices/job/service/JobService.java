@@ -12,5 +12,6 @@ public interface JobService {
     Job getJob(Long id);
     List<Job> getAllJobs();
     List<Job> getJobsByRecruiter(Long recruiterId);
+    public List<Job> recommendJobs(Long userId);
 
 }

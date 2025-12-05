@@ -60,7 +60,6 @@ public class ResumeMapper {
 
         return resume;
     }
-
     public ResumeDTO toDTO(Resume resume) {
         return new ResumeDTO(
                 resume.getId(),
@@ -84,7 +83,8 @@ public class ResumeMapper {
                                 e.getEndDate() != null ? e.getEndDate().toString() : null,
                                 e.getDescription()
                         )).toList(),
-                resume.getSkills().stream().map(Skill::getName).toList()
+                resume.getSkills().stream().map(Skill::getName).toList(),
+                null
         );
     }
 

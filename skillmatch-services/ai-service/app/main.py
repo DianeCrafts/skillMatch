@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.parse_resume import router as parse_router
+from app.routes.embeddings import router as embed_router
+
 
 app = FastAPI(title="SkillMatch AI-Service", version="1.0")
 
@@ -14,7 +16,7 @@ app.add_middleware(
 )
 
 app.include_router(parse_router)
-
+app.include_router(embed_router)
 @app.get("/health")
 def health():
     return {"status": "ok"}

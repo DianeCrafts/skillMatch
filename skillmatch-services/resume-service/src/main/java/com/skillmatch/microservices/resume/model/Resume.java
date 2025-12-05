@@ -45,4 +45,7 @@ public class Resume {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "resume-skill")
     private List<Skill> skills;
+
+    @Column(columnDefinition = "TEXT")
+    private String embeddingJson;
 }

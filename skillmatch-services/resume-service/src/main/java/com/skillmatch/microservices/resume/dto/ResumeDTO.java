@@ -10,5 +10,6 @@ public record ResumeDTO(
         String phone,
         List<EducationDTO> education,
         List<ExperienceDTO> experience,
-        List<String> skills
+        List<String> skills,
+        String fullText
 ) {}

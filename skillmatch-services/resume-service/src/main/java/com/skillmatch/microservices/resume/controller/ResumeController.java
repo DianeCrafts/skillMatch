@@ -1,6 +1,8 @@
 package com.skillmatch.microservices.resume.controller;
 
+import com.google.gson.Gson;
 import com.skillmatch.microservices.resume.dto.ResumeDTO;
+import com.skillmatch.microservices.resume.dto.ai.ResumeEmbeddingResponse;
 import com.skillmatch.microservices.resume.model.Resume;
 import com.skillmatch.microservices.resume.service.ResumeService;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,9 @@ public class ResumeController {
             String extractedText = service.parseResume(file);
             // 2. Send to AI parser
             ResumeDTO parsed = service.sendToAIService(extractedText);
+
+            parsed = service.attachFullText(parsed, extractedText);
+
             // 3. Return parsed result (NOT saved yet)
             return ResponseEntity.ok(parsed);
         } catch (Exception e) {
@@ -77,5 +82,18 @@ public class ResumeController {
                 ? ResponseEntity.ok(service.toDto(resume))
                 : ResponseEntity.notFound().build();
     }
+
+
+    @GetMapping("/user/{userId}/embedding")
+    public ResponseEntity<?> getResumeEmbedding(@PathVariable Long userId) {
+        Resume resume = service.getByUser(userId);
+        if (resume == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(new ResumeEmbeddingResponse(
+                resume.getEmbeddingJson(),
+                new Gson().fromJson(resume.getEmbeddingJson(), float[].class)
+        ));
+    }
+
 
 }

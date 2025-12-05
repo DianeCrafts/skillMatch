@@ -1,5 +1,7 @@
 package com.skillmatch.microservices.resume.service;
 
+import com.google.gson.Gson;
+import com.skillmatch.microservices.resume.ai.AiClient;
 import com.skillmatch.microservices.resume.dto.AIResponse;
 import com.skillmatch.microservices.resume.dto.ResumeDTO;
 import com.skillmatch.microservices.resume.dto.ResumeParseRequest;
@@ -18,10 +20,12 @@ public class ResumeService {
     private final ResumeRepository repo;
     private final ResumeMapper resumeMapper;
     private final WebClient webClient;
-    public ResumeService(ResumeRepository repo, WebClient aiWebClient, ResumeMapper resumeMapper) {
+    private final AiClient aiClient;
+    public ResumeService(ResumeRepository repo, WebClient aiWebClient, ResumeMapper resumeMapper, AiClient aiClient) {
         this.repo = repo;
         this.webClient = aiWebClient;
         this.resumeMapper = resumeMapper;
+        this.aiClient = aiClient;
     }
 
     /** Step 1: Extract text from PDF/DOCX */
@@ -46,9 +50,58 @@ public class ResumeService {
     }
 
     public Resume processAndSave(ResumeDTO parsed, Long userId) {
+
+        // Build or reuse fullText
+        String fullText = parsed.fullText();
+        if (fullText == null || fullText.isBlank()) {
+            fullText = buildFullTextFromFields(parsed);
+        }
+
+        // Generate embedding
+        float[] embedding = aiClient.getEmbedding(fullText);
+
+        // Convert DTO -> entity
         Resume resume = resumeMapper.toEntity(parsed, userId);
-        return saveResume(resume);
+        resume.setEmbeddingJson(new Gson().toJson(embedding));
+
+        return repo.save(resume);
     }
+
+
+    private String buildFullTextFromFields(ResumeDTO dto) {
+
+        StringBuilder sb = new StringBuilder();
+
+        if (dto.summary() != null) sb.append(dto.summary()).append("\n");
+        if (dto.name() != null) sb.append(dto.name()).append("\n");
+        if (dto.email() != null) sb.append(dto.email()).append("\n");
+        if (dto.phone() != null) sb.append(dto.phone()).append("\n");
+
+        if (dto.skills() != null) {
+            sb.append("Skills: ").append(String.join(", ", dto.skills())).append("\n");
+        }
+
+        if (dto.education() != null) {
+            dto.education().forEach(e -> sb.append(
+                    e.institution() + " " +
+                            e.degree() + " " +
+                            e.field() + " " +
+                            e.startDate() + " " + e.endDate() + "\n"
+            ));
+        }
+
+        if (dto.experience() != null) {
+            dto.experience().forEach(e -> sb.append(
+                    e.company() + " " +
+                            e.position() + " " +
+                            e.startDate() + " " + e.endDate() + " " +
+                            e.description() + "\n"
+            ));
+        }
+
+        return sb.toString();
+    }
+
     public Resume getByUser(Long userId) {
         return repo.findByUserId(userId);
     }
@@ -70,5 +123,18 @@ public class ResumeService {
         return repo.findById(resumeId).orElse(null);
     }
 
+    public ResumeDTO attachFullText(ResumeDTO dto, String fullText) {
+        return new ResumeDTO(
+                dto.id(),
+                dto.summary(),
+                dto.name(),
+                dto.email(),
+                dto.phone(),
+                dto.education(),
+                dto.experience(),
+                dto.skills(),
+                fullText
+        );
+    }
 
 }

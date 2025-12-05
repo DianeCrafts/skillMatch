@@ -87,4 +87,18 @@ public class JobController {
                         .toList()
         );
     }
+
+    @GetMapping("/recommended")
+    public ResponseEntity<List<JobResponse>> getRecommendedJobs(
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+        List<Job> recommended = jobService.recommendJobs(userId);
+
+        return ResponseEntity.ok(
+                recommended.stream()
+                        .map(jobMapper::toResponse)
+                        .toList()
+        );
+    }
+
 }
