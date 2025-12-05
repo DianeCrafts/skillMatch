@@ -101,7 +101,6 @@ export default {
       appliedJobs: [],
       searchQuery: "",
       searchResults: []
-
     };
   },
 
@@ -119,7 +118,6 @@ export default {
         default: return [];
       }
     }
-
   },
 
   mounted() {
@@ -130,30 +128,30 @@ export default {
   methods: {
     switchTab(tab) {
       this.activeTab = tab;
-      // Clear search when leaving All Jobs tab
+
       if (tab !== "all") {
         this.searchQuery = "";
         this.searchResults = [];
       }
+
       if (tab === "all") this.fetchAllJobs();
       if (tab === "applied") this.fetchAppliedJobs();
+      if (tab === "recommended") this.fetchRecommendedJobs();
     },
+
     handleSearch() {
       const q = this.searchQuery.trim();
-
-      // If empty, reset search
       if (q === "") {
         this.searchResults = [];
         return;
       }
 
-    // Call backend
-    jobsApi.get(`/search?keyword=${encodeURIComponent(q)}`)
+      jobsApi.get(`/search?keyword=${encodeURIComponent(q)}`)
         .then(res => {
           this.searchResults = res.data.map(job => ({
             id: job.id,
             title: job.title,
-            company: job.companyName || "Unknown Company",
+            company: "Unknown Company",
             location: job.location
           }));
         })
@@ -161,7 +159,6 @@ export default {
           console.error("Search failed:", err);
         });
     },
-
 
     fetchAllJobs() {
       jobsApi.get("")
@@ -172,15 +169,27 @@ export default {
             company: "Unknown Company",
             location: job.location
           }));
-
-          this.activeTab = "all";
         })
         .catch(err => console.error("Failed to load all jobs:", err));
     },
 
-    /* ---------------------------
-       APPLY TO JOB (BACKEND CALL)
-    ----------------------------*/
+    fetchRecommendedJobs() {
+      const userId = localStorage.getItem("userId");
+
+      jobsApi.get("/recommended", {
+        headers: { "x-user-id": userId }
+      })
+      .then(res => {
+        this.recommendedJobs = res.data.map(job => ({
+          id: job.id,
+          title: job.title,
+          company: "Unknown Company",
+          location: job.location
+        }));
+      })
+      .catch(err => console.error("Failed to load recommended jobs:", err));
+    },
+
     applyToJob(job) {
       const userId = localStorage.getItem("userId");
 
@@ -189,7 +198,6 @@ export default {
         return;
       }
 
-      // FRONTEND PREVENTION: already applied?
       if (this.hasApplied(job)) {
         alert("You already applied to this job.");
         return;
@@ -198,21 +206,22 @@ export default {
       applicationApi.post(`/${job.id}/apply`, null, {
         headers: { "x-user-id": userId }
       })
-        .then(() => {
-          alert("Applied successfully!");
-          this.fetchAppliedJobs(); // refresh applied list
-        })
-        .catch(err => {
-          if (err.response?.status === 400) {
-            alert("You already applied to this job.");
-          } else if (err.response?.status === 403) {
-            alert("You must upload a resume first.");
-          } else {
-            alert("Failed to apply to job.");
-          }
-          console.error("Apply failed:", err);
-        });
+      .then(() => {
+        alert("Applied successfully!");
+        this.fetchAppliedJobs();
+      })
+      .catch(err => {
+        if (err.response?.status === 400) {
+          alert("You already applied to this job.");
+        } else if (err.response?.status === 403) {
+          alert("You must upload a resume first.");
+        } else {
+          alert("Failed to apply to job.");
+        }
+        console.error("Apply failed:", err);
+      });
     },
+
     hasApplied(job) {
       return this.appliedJobs.some(applied => applied.id === job.id);
     },
@@ -235,19 +244,20 @@ export default {
       applicationApi.get("/applied", {
         headers: { "x-user-id": userId }
       })
-        .then(res => {
-          this.appliedJobs = res.data.map(job => ({
-            id: job.id,
-            title: job.title,
-            company: "Unknown Company",
-            location: job.location
-          }));
-        })
-        .catch(err => console.error("Failed to load applied jobs:", err));
+      .then(res => {
+        this.appliedJobs = res.data.map(job => ({
+          id: job.id,
+          title: job.title,
+          company: "Unknown Company",
+          location: job.location
+        }));
+      })
+      .catch(err => console.error("Failed to load applied jobs:", err));
     }
   }
 };
 </script>
+
 
 <style scoped>
 /* GLOBAL RESET */
