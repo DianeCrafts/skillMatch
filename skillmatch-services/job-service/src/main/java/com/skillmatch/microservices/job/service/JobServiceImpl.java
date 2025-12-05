@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,21 +105,56 @@ public class JobServiceImpl implements JobService {
 
     private void indexJobInES(Job job, float[] embedding) {
         try {
+            Map<String, Object> doc = new HashMap<>();
+            doc.put("id", job.getId());
+            doc.put("title", job.getTitle());
+            doc.put("description", job.getDescription());
+            doc.put("requirements", job.getRequirements());
+            doc.put("skills", job.getSkills());
+            doc.put("experience", job.getExperience());
+            doc.put("location", job.getLocation());
+            doc.put("salary", job.getSalary());
+            doc.put("remote", job.isRemote());
+            doc.put("company_name", "Unknown Company");
+            doc.put("embedding_json", embedding);
+
+
             esClient.index(i -> i
                     .index("jobs")
                     .id(job.getId().toString())
-                    .document(Map.of(
-                            "id", job.getId(),
-                            "title", job.getTitle(),
-                            "description", job.getDescription(),
-                            "skills", job.getSkills(),
-                            "embedding", embedding
-                    ))
+                    .document(doc)
             );
+
+
         } catch (IOException e) {
-            System.err.println("Failed to index job in Elasticsearch: " + e.getMessage());
+            System.err.println("Failed to index job: " + e.getMessage());
         }
     }
+
+//    public void rebuildIndex() {
+//        try {
+//            // Delete old index
+//            try { esClient.indices().delete(d -> d.index("jobs")); }
+//            catch (Exception ignored) {}
+//
+//            // Create new index from JSON file
+//            String json = new String(Files.readAllBytes(Paths.get("src/main/resources/es/jobs-index.json")));
+//            esClient.indices().create(c -> c.index("jobs").withJson(new StringReader(json)));
+//
+//            // Index all jobs
+//            List<Job> jobs = jobRepository.findAll();
+//            for (Job job : jobs) {
+//                float[] embedding = embeddingService.generate(job);
+//                indexJobInES(job, embedding);
+//            }
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to rebuild index", e);
+//        }
+//    }
+
+
+
 
 
     private void deleteJobFromES(Long jobId) {
