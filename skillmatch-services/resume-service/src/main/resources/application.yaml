@@ -1,6 +1,5 @@
 server:
   port: 8082
-
 spring:
   application:
     name: resume-service
@@ -13,14 +12,14 @@ spring:
       hibernate:
         format_sql: true
 
-  profiles:
-    active: dev
-
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 15MB
+  profiles:
+    default: dev
 
 ai:
   service:
-    url: http://localhost:8000
+    url: ${AI_SERVICE_URL:http://localhost:8000}
+

@@ -1,0 +1,148 @@
+version: "3.9"
+
+services:
+  # --------------------------
+  # Database (PostgreSQL)
+  # --------------------------
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: m2380223802
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+    - ./init-db:/docker-entrypoint-initdb.d  # <-- Runs SQL at startup
+    networks:
+      - skillmatch-network
+
+
+  # --------------------------
+  # Elasticsearch
+  # --------------------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - skillmatch-network
+
+  # --------------------------
+  # User Service
+  # --------------------------
+  user-service:
+    image: skillmatch-user-service
+    container_name: user-service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: userdb
+      DB_USER: postgres
+      DB_PASSWORD: m2380223802  
+      JWT_SECRET: 0FB2H2Y90GL7TIF2+b95VFCC97TegQ7De2lXa7DTkQ7NrgfPCg/2g33jxore+7XfcZxB+QSOEMH6djDPqtqTBA==
+      JWT_EXPIRATION: 36000
+    ports:
+      - "8081:8080"
+    networks:
+      - skillmatch-network
+
+  # --------------------------
+  # Resume Service
+  # --------------------------
+  resume-service:
+    image: skillmatch-resume-service
+    container_name: resume-service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: resumedb
+      DB_USER: postgres
+      DB_PASSWORD: m2380223802
+      JWT_SECRET: 0FB2H2Y90GL7TIF2+b95VFCC97TegQ7De2lXa7DTkQ7NrgfPCg/2g33jxore+7XfcZxB+QSOEMH6djDPqtqTBA==
+      AI_SERVICE_URL: http://ai-service:8000
+    ports:
+      - "8082:8080"
+    networks:
+      - skillmatch-network
+    
+
+  # --------------------------
+  # Job Service
+  # --------------------------
+  job-service:
+    image: skillmatch-job-service
+    container_name: job-service
+    depends_on:
+      - postgres
+      - elasticsearch
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: jobdb
+      DB_USER: postgres
+      DB_PASSWORD: m2380223802
+      JWT_SECRET: 0FB2H2Y90GL7TIF2+b95VFCC97TegQ7De2lXa7DTkQ7NrgfPCg/2g33jxore+7XfcZxB+QSOEMH6djDPqtqTBA==
+      ES_HOST: elasticsearch
+      AI_SERVICE_URL: http://ai-service:8000
+      RESUME_SERVICE_URL: http://resume-service:8080
+    ports:
+      - "8083:8080"
+    networks:
+      - skillmatch-network
+
+  # --------------------------
+  # AI Service (Python)
+  # --------------------------
+  ai-service:
+    image: skillmatch-ai-service
+    container_name: ai-service
+    ports:
+      - "8000:8000"
+    networks:
+      - skillmatch-network
+
+
+  # --------------------------
+  # Frontend (Nginx)
+  # --------------------------
+  frontend:
+    image: skillmatch-frontend
+    container_name: skillmatch-frontend
+    ports:
+      - "5173:80"   # Browser → Nginx container
+    depends_on:
+      - user-service
+      - job-service
+      - resume-service
+      - ai-service
+    networks:
+      - skillmatch-network
+
+# --------------------------
+# Volumes
+# --------------------------
+volumes:
+  postgres_data:
+
+# --------------------------
+# Network
+# --------------------------
+networks:
+  skillmatch-network:
+    driver: bridge

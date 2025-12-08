@@ -1,9 +1,11 @@
 <template>
   <div class="auth-page">
-
     <div class="auth-card">
 
       <h2 class="title">Register</h2>
+
+      <!-- Error Component -->
+      <ErrorMessage :message="error" />
 
       <form class="form" @submit.prevent="register">
 
@@ -35,25 +37,30 @@
       </form>
 
     </div>
-
   </div>
 </template>
 
 <script>
 import userApi from "@/apis/userApi";
+import ErrorMessage from "@/components/ErrorMessage.vue";
 
 export default {
+  components: { ErrorMessage },
+
   data() {
     return {
       name: "",
       email: "",
       password: "",
-      role: "USER"
+      role: "USER",
+      error: ""
     };
   },
 
   methods: {
     async register() {
+      this.error = ""; // clear old errors
+
       try {
         await userApi.post("/users/register", {
           name: this.name,
@@ -62,11 +69,11 @@ export default {
           role: this.role
         });
 
-        alert("Registration successful! Please login.");
         this.$router.push("/login");
 
       } catch (err) {
-        alert("Registration failed. Email may already exist.");
+        // you can refine this message based on backend response
+        this.error = "Registration failed. Email may already exist.";
         console.error("Registration error:", err);
       }
     }

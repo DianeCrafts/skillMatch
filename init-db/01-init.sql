@@ -1,0 +1,3 @@
+CREATE DATABASE userdb;
+CREATE DATABASE jobdb;
+CREATE DATABASE resumedb;

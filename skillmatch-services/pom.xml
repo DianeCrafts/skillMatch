@@ -14,7 +14,6 @@
         <module>resume-service</module>
         <module>job-service</module>
     </modules>
-
     <properties>
         <java.version>21</java.version>
         <spring.boot.version>3.5.7</spring.boot.version>

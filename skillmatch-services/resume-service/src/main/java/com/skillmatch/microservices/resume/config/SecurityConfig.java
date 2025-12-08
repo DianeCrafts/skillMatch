@@ -24,12 +24,12 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})   // ✅ allow frontend access
+                .cors(cors -> {})   // allow frontend access
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ allow Swagger access
+                        // allow Swagger access
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

@@ -1,9 +1,11 @@
 <template>
   <div class="auth-page">
-
     <div class="auth-card">
 
       <h2 class="title">Login</h2>
+
+      <!-- Error Display -->
+      <ErrorMessage :message="error" />
 
       <form class="form" @submit.prevent="login">
 
@@ -22,23 +24,28 @@
       </form>
 
     </div>
-
   </div>
 </template>
 
 <script>
 import userApi from "@/apis/userApi";
+import ErrorMessage from "@/components/ErrorMessage.vue";
 
 export default {
+  components: { ErrorMessage },
+
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      error: ""        // <- track error message here
     };
   },
 
   methods: {
     async login() {
+      this.error = ""; // reset
+
       try {
         const res = await userApi.post("/users/login", {
           email: this.email,
@@ -57,13 +64,14 @@ export default {
         else this.$router.push("/recruiter-dashboard");
 
       } catch (err) {
-        alert("Invalid credentials");
+        this.error = "Invalid email or password";
         console.error("Login error:", err);
       }
     }
   }
 };
 </script>
+
 
 <style scoped>
 /* -------------------------------

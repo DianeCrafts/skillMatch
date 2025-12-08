@@ -10,13 +10,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class AiClient {
 
-    private final WebClient webClient;
+    private final WebClient aiWebClient;
 
     public float[] getEmbedding(String text) {
+
         EmbeddingRequest request = new EmbeddingRequest(text);
 
-        EmbeddingResponse response = webClient.post()
-                .uri("http://localhost:8000/api/ai/embed-text")
+        EmbeddingResponse response = aiWebClient.post()
+                .uri("/api/ai/embed-text") // ← NO localhost, NO hardcoded base URL
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(EmbeddingResponse.class)
@@ -26,3 +27,4 @@ public class AiClient {
         return response.embedding();
     }
 }
+

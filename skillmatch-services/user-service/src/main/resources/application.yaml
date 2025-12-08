@@ -1,6 +1,5 @@
 server:
   port: 8081
-
 spring:
   application:
     name: user-service
@@ -14,4 +13,4 @@ spring:
         format_sql: true
 
   profiles:
-    active: dev
+    default: dev

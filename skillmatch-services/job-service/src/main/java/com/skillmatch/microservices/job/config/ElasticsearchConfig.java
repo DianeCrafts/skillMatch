@@ -10,28 +10,36 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ElasticsearchConfig {
 
+    @Value("${elasticsearch.host}")
+    private String esHost;
+
+    @Value("${elasticsearch.port}")
+    private int esPort;
+
     @Bean
     public ElasticsearchClient elasticsearchClient() {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // <-- ADD THIS
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         RestClient restClient = RestClient.builder(
-                new HttpHost("localhost", 9200)
+                new HttpHost(esHost, esPort)
         ).build();
 
         ElasticsearchTransport transport = new RestClientTransport(
                 restClient,
-                new JacksonJsonpMapper(objectMapper) // <-- use our mapper
+                new JacksonJsonpMapper(objectMapper)
         );
 
         return new ElasticsearchClient(transport);
     }
+
 }

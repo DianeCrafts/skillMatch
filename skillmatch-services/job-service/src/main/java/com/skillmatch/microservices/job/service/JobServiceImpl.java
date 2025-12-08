@@ -131,28 +131,6 @@ public class JobServiceImpl implements JobService {
         }
     }
 
-//    public void rebuildIndex() {
-//        try {
-//            // Delete old index
-//            try { esClient.indices().delete(d -> d.index("jobs")); }
-//            catch (Exception ignored) {}
-//
-//            // Create new index from JSON file
-//            String json = new String(Files.readAllBytes(Paths.get("src/main/resources/es/jobs-index.json")));
-//            esClient.indices().create(c -> c.index("jobs").withJson(new StringReader(json)));
-//
-//            // Index all jobs
-//            List<Job> jobs = jobRepository.findAll();
-//            for (Job job : jobs) {
-//                float[] embedding = embeddingService.generate(job);
-//                indexJobInES(job, embedding);
-//            }
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to rebuild index", e);
-//        }
-//    }
-
 
 
 

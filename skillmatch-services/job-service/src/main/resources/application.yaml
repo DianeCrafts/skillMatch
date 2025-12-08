@@ -1,6 +1,5 @@
 server:
   port: 8083
-
 spring:
   application:
     name: job-service
@@ -14,6 +13,17 @@ spring:
         format_sql: true
 
   profiles:
-    active: dev
+    default: dev
 
 
+resume:
+  service:
+    url: ${RESUME_SERVICE_URL:http://localhost:8082}
+
+ai:
+  service:
+    url: ${AI_SERVICE_URL:http://localhost:8000}
+
+elasticsearch:
+  host: localhost
+  port: 9200
