@@ -7,6 +7,13 @@ SkillMatch processes resumes, interprets job postings, and uses machine learning
 
 The system combines Spring Boot, FastAPI, LLMs, Elasticsearch, and PostgreSQL to deliver a complete end-to-end recruitment solution.
 
+The demo video is available below on YouTube:👇
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=zogT5CvejKM">
+    <img src="https://img.youtube.com/vi/zogT5CvejKM/maxresdefault.jpg" alt="Demo Video" width="50%">
+  </a>
+</p>
 
 
 ##  System Architecture Overview
