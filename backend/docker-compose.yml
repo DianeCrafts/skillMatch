@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7
+    container_name: skillmatch-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  auth-db:
+    image: postgres:16
+    container_name: skillmatch-auth-db
+    environment:
+      POSTGRES_DB: ${AUTH_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth_pg_data:/var/lib/postgresql/data
+
+  profile-db:
+    image: postgres:16
+    container_name: skillmatch-profile-db
+    environment:
+      POSTGRES_DB: ${PROFILE_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - profile_pg_data:/var/lib/postgresql/data
+
+  job-db:
+    image: postgres:16
+    container_name: skillmatch-job-db
+    environment:
+      POSTGRES_DB: ${JOB_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - job_pg_data:/var/lib/postgresql/data
+
+  application-db:
+    image: postgres:16
+    container_name: skillmatch-application-db
+    environment:
+      POSTGRES_DB: ${APPLICATION_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5436:5432"
+    volumes:
+      - application_pg_data:/var/lib/postgresql/data
+
+  file-db:
+    image: postgres:16
+    container_name: skillmatch-file-db
+    environment:
+      POSTGRES_DB: ${FILE_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5437:5432"
+    volumes:
+      - file_pg_data:/var/lib/postgresql/data
+
+  notification-db:
+    image: postgres:16
+    container_name: skillmatch-notification-db
+    environment:
+      POSTGRES_DB: ${NOTIFICATION_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5438:5432"
+    volumes:
+      - notification_pg_data:/var/lib/postgresql/data
+
+volumes:
+  auth_pg_data:
+  profile_pg_data:
+  job_pg_data:
+  application_pg_data:
+  file_pg_data:
+  notification_pg_data:

@@ -123,7 +123,7 @@ export default {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        alert("You must be logged in to apply.");
+        this.$toast.error("You must be logged in to apply.");
         return;
       }
 
@@ -131,7 +131,7 @@ export default {
         headers: { "x-user-id": userId }
       })
         .then(() => {
-          alert("Applied successfully!");
+          this.$toast.success("Applied successfully!");
           this.hasApplied = true;
         })
         .catch(err => console.error(err));

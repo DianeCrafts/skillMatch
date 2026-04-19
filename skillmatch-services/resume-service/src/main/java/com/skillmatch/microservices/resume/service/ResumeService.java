@@ -12,7 +12,7 @@ import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
-
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class ResumeService {
@@ -21,11 +21,13 @@ public class ResumeService {
     private final ResumeMapper resumeMapper;
     private final WebClient webClient;
     private final AiClient aiClient;
-    public ResumeService(ResumeRepository repo, WebClient aiWebClient, ResumeMapper resumeMapper, AiClient aiClient) {
+    private final String aiServiceUrl;
+    public ResumeService(ResumeRepository repo, WebClient aiWebClient, ResumeMapper resumeMapper, AiClient aiClient, @Value("${ai.service.url}") String aiServiceUrl) {
         this.repo = repo;
         this.webClient = aiWebClient;
         this.resumeMapper = resumeMapper;
         this.aiClient = aiClient;
+        this.aiServiceUrl = aiServiceUrl;
     }
 
     /** Step 1: Extract text from PDF/DOCX */
@@ -37,7 +39,7 @@ public class ResumeService {
     /** Step 2: Send extracted text to AIService */
     public ResumeDTO sendToAIService(String text) {
         return webClient.post()
-                .uri("http://localhost:8000/api/ai/parse-resume")
+                .uri(aiServiceUrl + "/api/ai/parse-resume")
                 .bodyValue(new ResumeParseRequest(text))
                 .retrieve()
                 .bodyToMono(AIResponse.class)

@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.skillmatch.microservices.job.model.Job;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

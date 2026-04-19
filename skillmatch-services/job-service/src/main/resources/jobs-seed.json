@@ -1,0 +1,1002 @@
+[
+  {
+    "title": "Operations Manager",
+    "description": "Oversee daily operations, manage staff schedules, and optimize internal workflows.",
+    "companyName": "Operix",
+    "location": "Berlin",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["operations", "leadership", "planning"]
+  },
+  {
+    "title": "Customer Support Specialist",
+    "description": "Provide customer support via email and phone while resolving issues efficiently.",
+    "companyName": "HelpNow",
+    "location": "Remote",
+    "salary": "45k-60k",
+    "experience": "1+ years",
+    "remote": true,
+    "skills": ["communication", "problem solving"]
+  },
+  {
+    "title": "Marketing Coordinator",
+    "description": "Assist in planning marketing campaigns and managing social media channels.",
+    "companyName": "Brandify",
+    "location": "London",
+    "salary": "50k-70k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["marketing", "content", "analytics"]
+  },
+  {
+    "title": "Logistics Analyst",
+    "description": "Analyze logistics data to improve delivery times and reduce operational costs.",
+    "companyName": "MoveFast",
+    "location": "Hamburg",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["analysis", "logistics", "reporting"]
+  },
+  {
+    "title": "Human Resources Generalist",
+    "description": "Handle recruitment, onboarding, and employee relations activities.",
+    "companyName": "PeopleFirst",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["recruitment", "communication"]
+  },
+  {
+    "title": "Finance Assistant",
+    "description": "Support finance team with invoicing, budgeting, and expense tracking.",
+    "companyName": "FinCore",
+    "location": "Zurich",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["finance", "excel", "attention to detail"]
+  },
+  {
+    "title": "Office Administrator",
+    "description": "Manage office supplies, scheduling, and internal communications.",
+    "companyName": "OfficeHub",
+    "location": "Madrid",
+    "salary": "40k-55k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["organization", "communication"]
+  },
+  {
+    "title": "Sales Executive",
+    "description": "Develop client relationships and close new business opportunities.",
+    "companyName": "SalesPro",
+    "location": "Paris",
+    "salary": "60k-85k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["sales", "negotiation"]
+  },
+  {
+    "title": "Training Coordinator",
+    "description": "Organize employee training sessions and professional development programs.",
+    "companyName": "LearnWell",
+    "location": "Dublin",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["training", "coordination"]
+  },
+  {
+    "title": "Facilities Supervisor",
+    "description": "Ensure facilities are maintained and comply with safety regulations.",
+    "companyName": "BuildCare",
+    "location": "Oslo",
+    "salary": "65k-85k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["facilities", "safety"]
+  },
+  {
+    "title": "Content Editor",
+    "description": "Edit and review written content for clarity, grammar, and consistency.",
+    "companyName": "WriteRight",
+    "location": "Remote",
+    "salary": "50k-70k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["editing", "writing"]
+  },
+  {
+    "title": "Procurement Assistant",
+    "description": "Support procurement processes including vendor communication and order tracking.",
+    "companyName": "SupplySource",
+    "location": "Warsaw",
+    "salary": "45k-60k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["procurement", "coordination"]
+  },
+  {
+    "title": "Project Assistant",
+    "description": "Assist project managers with documentation, scheduling, and reporting.",
+    "companyName": "PlanRight",
+    "location": "Vienna",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["organization", "documentation"]
+  },
+  {
+    "title": "Quality Control Inspector",
+    "description": "Inspect products and ensure compliance with quality standards.",
+    "companyName": "QualityFirst",
+    "location": "Brno",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["quality control", "inspection"]
+  },
+  {
+    "title": "Business Support Officer",
+    "description": "Provide administrative and operational support across departments.",
+    "companyName": "BizAssist",
+    "location": "Brussels",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["administration", "operations"]
+  },
+  {
+    "title": "Event Assistant",
+    "description": "Support planning and execution of corporate events and meetings.",
+    "companyName": "Eventify",
+    "location": "Barcelona",
+    "salary": "45k-60k",
+    "experience": "1+ years",
+    "remote": false,
+    "skills": ["events", "coordination"]
+  },
+  {
+    "title": "Account Coordinator",
+    "description": "Assist account managers with client communication and reporting.",
+    "companyName": "ClientCare",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["account management", "communication"]
+  },
+  {
+    "title": "Research Assistant",
+    "description": "Collect and analyze data to support research projects and reports.",
+    "companyName": "InsightWorks",
+    "location": "Stockholm",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["research", "analysis"]
+  },
+  {
+    "title": "Administrative Coordinator",
+    "description": "Coordinate administrative tasks and maintain internal documentation.",
+    "companyName": "AdminPro",
+    "location": "Helsinki",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["administration", "organization"]
+  },
+  {
+    "title": "Customer Relations Officer",
+    "description": "Maintain positive customer relationships and handle escalations.",
+    "companyName": "ConnectPlus",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["customer service", "communication"]
+  },
+  {
+    "title": "Operations Assistant",
+    "description": "Support daily operational activities including scheduling, reporting, and coordination across teams.",
+    "companyName": "Operexa",
+    "location": "Vienna",
+    "salary": "45k-60k",
+    "experience": "1+ years",
+    "remote": false,
+    "skills": ["operations", "coordination"]
+  },
+  {
+    "title": "Customer Experience Specialist",
+    "description": "Improve customer journeys by analyzing feedback and resolving service issues.",
+    "companyName": "CXWorks",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["customer service", "analysis"]
+  },
+  {
+    "title": "Administrative Assistant",
+    "description": "Provide administrative support including document handling and meeting coordination.",
+    "companyName": "Adminia",
+    "location": "Prague",
+    "salary": "40k-55k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["administration", "organization"]
+  },
+  {
+    "title": "Facilities Operations Manager",
+    "description": "Manage facility operations, vendor relationships, and maintenance schedules.",
+    "companyName": "FacilityOne",
+    "location": "Copenhagen",
+    "salary": "75k-95k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["facilities", "management"]
+  },
+  {
+    "title": "Compliance Analyst",
+    "description": "Monitor regulatory compliance and prepare audit documentation.",
+    "companyName": "RegulaWorks",
+    "location": "Luxembourg",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["compliance", "analysis"]
+  },
+  {
+    "title": "Business Operations Analyst",
+    "description": "Analyze business processes and recommend operational improvements.",
+    "companyName": "BizOps",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["business analysis", "operations"]
+  },
+  {
+    "title": "Procurement Coordinator",
+    "description": "Coordinate purchasing activities and maintain supplier relationships.",
+    "companyName": "SourceLine",
+    "location": "Budapest",
+    "salary": "50k-70k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["procurement", "communication"]
+  },
+  {
+    "title": "Quality Assurance Coordinator",
+    "description": "Coordinate quality checks and ensure adherence to internal standards.",
+    "companyName": "QualiTrust",
+    "location": "Bratislava",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["quality assurance", "documentation"]
+  },
+  {
+    "title": "Office Operations Manager",
+    "description": "Oversee office operations, budgeting, and vendor contracts.",
+    "companyName": "OfficeCore",
+    "location": "Munich",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["office management", "budgeting"]
+  },
+  {
+    "title": "Internal Communications Officer",
+    "description": "Develop and manage internal communication strategies across departments.",
+    "companyName": "ConnectOrg",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["communication", "content"]
+  },
+  {
+    "title": "Records Management Specialist",
+    "description": "Maintain accurate records and ensure proper document archiving.",
+    "companyName": "RecordSafe",
+    "location": "Tallinn",
+    "salary": "45k-60k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["records management", "attention to detail"]
+  },
+  {
+    "title": "Risk Management Assistant",
+    "description": "Support risk assessments and maintain risk documentation.",
+    "companyName": "RiskAware",
+    "location": "Frankfurt",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["risk management", "analysis"]
+  },
+  {
+    "title": "Vendor Relations Manager",
+    "description": "Manage vendor relationships and negotiate service agreements.",
+    "companyName": "VendorLink",
+    "location": "Milan",
+    "salary": "75k-95k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["vendor management", "negotiation"]
+  },
+  {
+    "title": "Training Operations Coordinator",
+    "description": "Coordinate logistics for training programs and workshops.",
+    "companyName": "TrainOps",
+    "location": "Remote",
+    "salary": "55k-70k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["training", "coordination"]
+  },
+  {
+    "title": "Document Control Officer",
+    "description": "Ensure controlled handling of internal documentation and policies.",
+    "companyName": "DocuGuard",
+    "location": "Geneva",
+    "salary": "60k-80k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["documentation", "compliance"]
+  },
+  {
+    "title": "Service Delivery Coordinator",
+    "description": "Coordinate service delivery processes and monitor service quality.",
+    "companyName": "Deliverix",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["service delivery", "coordination"]
+  },
+  {
+    "title": "Business Support Coordinator",
+    "description": "Provide operational and administrative support to business units.",
+    "companyName": "SupportPlus",
+    "location": "Zagreb",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["business support", "administration"]
+  },
+  {
+    "title": "Policy Operations Officer",
+    "description": "Support policy implementation and monitor compliance activities.",
+    "companyName": "PolicyCore",
+    "location": "Brussels",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["policy", "operations"]
+  },
+  {
+    "title": "Knowledge Management Specialist",
+    "description": "Maintain internal knowledge bases and documentation standards.",
+    "companyName": "KnowBase",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["knowledge management", "documentation"]
+  },
+  {
+    "title": "Process Improvement Analyst",
+    "description": "Identify inefficiencies and recommend process improvements.",
+    "companyName": "ProcessIQ",
+    "location": "Rotterdam",
+    "salary": "75k-95k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["process improvement", "analysis"]
+  },
+  {
+    "title": "Operations Planner",
+    "description": "Plan and coordinate operational activities to ensure efficient resource utilization.",
+    "companyName": "PlanOps",
+    "location": "Zurich",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["planning", "operations"]
+  },
+  {
+    "title": "Customer Retention Specialist",
+    "description": "Develop strategies to improve customer retention and reduce churn.",
+    "companyName": "RetainCo",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["customer retention", "communication"]
+  },
+  {
+    "title": "Scheduling Coordinator",
+    "description": "Manage schedules, appointments, and resource allocation across teams.",
+    "companyName": "TimeWorks",
+    "location": "Ljubljana",
+    "salary": "45k-60k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["scheduling", "coordination"]
+  },
+  {
+    "title": "Operational Risk Analyst",
+    "description": "Identify operational risks and support mitigation planning.",
+    "companyName": "RiskLine",
+    "location": "Frankfurt",
+    "salary": "75k-95k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["risk analysis", "operations"]
+  },
+  {
+    "title": "Business Continuity Coordinator",
+    "description": "Support business continuity planning and disaster recovery processes.",
+    "companyName": "ContinuityPlus",
+    "location": "Remote",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": true,
+    "skills": ["business continuity", "planning"]
+  },
+  {
+    "title": "Administrative Services Manager",
+    "description": "Oversee administrative services and ensure efficient office operations.",
+    "companyName": "AdminCore",
+    "location": "Munich",
+    "salary": "65k-85k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["administration", "management"]
+  },
+  {
+    "title": "Client Onboarding Specialist",
+    "description": "Guide new clients through onboarding and ensure a smooth transition.",
+    "companyName": "Onboardly",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["client onboarding", "communication"]
+  },
+  {
+    "title": "Workplace Experience Coordinator",
+    "description": "Enhance workplace experience through engagement initiatives and services.",
+    "companyName": "WorkJoy",
+    "location": "Amsterdam",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["employee experience", "coordination"]
+  },
+  {
+    "title": "Inventory Control Analyst",
+    "description": "Monitor inventory levels and optimize stock management processes.",
+    "companyName": "StockWise",
+    "location": "Antwerp",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["inventory", "analysis"]
+  },
+  {
+    "title": "Service Operations Analyst",
+    "description": "Analyze service performance metrics and recommend improvements.",
+    "companyName": "ServeOps",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["operations analysis", "reporting"]
+  },
+  {
+    "title": "Corporate Services Officer",
+    "description": "Support corporate services including facilities, travel, and vendor management.",
+    "companyName": "CorpServe",
+    "location": "Luxembourg",
+    "salary": "60k-80k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["corporate services", "coordination"]
+  },
+  {
+    "title": "Process Documentation Specialist",
+    "description": "Document internal processes and maintain operational guidelines.",
+    "companyName": "ProcessDocs",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["documentation", "process mapping"]
+  },
+  {
+    "title": "Business Services Coordinator",
+    "description": "Coordinate shared business services across departments.",
+    "companyName": "BizServe",
+    "location": "Zürich",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["business services", "coordination"]
+  },
+  {
+    "title": "Employee Engagement Officer",
+    "description": "Design initiatives to improve employee engagement and satisfaction.",
+    "companyName": "EngageNow",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["employee engagement", "communication"]
+  },
+  {
+    "title": "Operational Reporting Analyst",
+    "description": "Prepare operational reports and performance dashboards.",
+    "companyName": "ReportIQ",
+    "location": "Stockholm",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["reporting", "data analysis"]
+  },
+  {
+    "title": "Facilities Operations Coordinator",
+    "description": "Coordinate facilities maintenance and service requests.",
+    "companyName": "FacilityFlow",
+    "location": "Oslo",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["facilities", "coordination"]
+  },
+  {
+    "title": "Client Support Operations Lead",
+    "description": "Lead client support operations and optimize service workflows.",
+    "companyName": "SupportOps",
+    "location": "Remote",
+    "salary": "75k-95k",
+    "experience": "5+ years",
+    "remote": true,
+    "skills": ["support operations", "leadership"]
+  },
+  {
+    "title": "Vendor Operations Analyst",
+    "description": "Analyze vendor performance and support contract optimization.",
+    "companyName": "VendorIQ",
+    "location": "Milan",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["vendor management", "analysis"]
+  },
+  {
+    "title": "Operational Excellence Manager",
+    "description": "Drive continuous improvement initiatives across operational teams.",
+    "companyName": "OpEx Group",
+    "location": "Paris",
+    "salary": "90k-110k",
+    "experience": "6+ years",
+    "remote": false,
+    "skills": ["continuous improvement", "operations"]
+  },
+  {
+    "title": "Service Quality Manager",
+    "description": "Ensure service quality standards are met and continuously improved.",
+    "companyName": "QualiServe",
+    "location": "Remote",
+    "salary": "80k-100k",
+    "experience": "5+ years",
+    "remote": true,
+    "skills": ["service quality", "management"]
+  },
+  {
+    "title": "Service Operations Coordinator",
+    "description": "Coordinate service operations, track service requests, and ensure timely resolution.",
+    "companyName": "ServeLine",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["service operations", "coordination"]
+  },
+  {
+    "title": "Administrative Services Coordinator",
+    "description": "Coordinate administrative services including documentation and office support.",
+    "companyName": "AdminWorks",
+    "location": "Brno",
+    "salary": "45k-60k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["administration", "coordination"]
+  },
+  {
+    "title": "Client Relationship Officer",
+    "description": "Maintain strong client relationships and act as a primary point of contact.",
+    "companyName": "RelateCo",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["client relations", "communication"]
+  },
+  {
+    "title": "Operational Planning Analyst",
+    "description": "Support operational planning through data analysis and forecasting.",
+    "companyName": "PlanWise",
+    "location": "Frankfurt",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["planning", "analysis"]
+  },
+  {
+    "title": "Office Services Manager",
+    "description": "Manage office services including facilities, vendors, and workplace support.",
+    "companyName": "OfficeServe",
+    "location": "Munich",
+    "salary": "75k-95k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["office management", "services"]
+  },
+  {
+    "title": "Customer Operations Analyst",
+    "description": "Analyze customer operations data to improve service efficiency.",
+    "companyName": "CustOps",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["customer operations", "analysis"]
+  },
+  {
+    "title": "Facilities Services Supervisor",
+    "description": "Supervise facilities services and coordinate maintenance activities.",
+    "companyName": "FacilityServe",
+    "location": "Oslo",
+    "salary": "65k-85k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["facilities", "supervision"]
+  },
+  {
+    "title": "Business Administration Officer",
+    "description": "Support business administration tasks and maintain internal records.",
+    "companyName": "BizAdmin",
+    "location": "Zagreb",
+    "salary": "50k-65k",
+    "experience": "2+ years",
+    "remote": false,
+    "skills": ["administration", "record keeping"]
+  },
+  {
+    "title": "Operational Compliance Coordinator",
+    "description": "Coordinate compliance activities and support internal audits.",
+    "companyName": "ComplyOps",
+    "location": "Luxembourg",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["compliance", "operations"]
+  },
+  {
+    "title": "Customer Support Operations Analyst",
+    "description": "Analyze customer support workflows and recommend improvements.",
+    "companyName": "SupportIQ",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["support operations", "analysis"]
+  },
+  {
+    "title": "Corporate Administration Manager",
+    "description": "Oversee corporate administrative functions and ensure operational efficiency.",
+    "companyName": "CorpAdmin",
+    "location": "Vienna",
+    "salary": "80k-100k",
+    "experience": "6+ years",
+    "remote": false,
+    "skills": ["corporate administration", "management"]
+  },
+  {
+    "title": "Vendor Coordination Specialist",
+    "description": "Coordinate vendor activities and ensure service-level agreements are met.",
+    "companyName": "VendorServe",
+    "location": "Milan",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["vendor coordination", "communication"]
+  },
+  {
+    "title": "Workplace Operations Lead",
+    "description": "Lead workplace operations initiatives to improve employee experience.",
+    "companyName": "WorkOps",
+    "location": "Amsterdam",
+    "salary": "85k-105k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["workplace operations", "leadership"]
+  },
+  {
+    "title": "Process Control Officer",
+    "description": "Monitor and control operational processes to ensure consistency.",
+    "companyName": "ProcessGuard",
+    "location": "Geneva",
+    "salary": "65k-85k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["process control", "monitoring"]
+  },
+  {
+    "title": "Shared Services Coordinator",
+    "description": "Coordinate shared services across departments and resolve service issues.",
+    "companyName": "SharedCore",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["shared services", "coordination"]
+  },
+  {
+    "title": "Operational Metrics Analyst",
+    "description": "Track operational metrics and prepare performance reports.",
+    "companyName": "MetricOps",
+    "location": "Stockholm",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["metrics", "reporting"]
+  },
+  {
+    "title": "Client Service Delivery Manager",
+    "description": "Manage client service delivery and ensure contractual commitments are met.",
+    "companyName": "DeliverPlus",
+    "location": "Remote",
+    "salary": "85k-105k",
+    "experience": "5+ years",
+    "remote": true,
+    "skills": ["service delivery", "client management"]
+  },
+  {
+    "title": "Operational Documentation Coordinator",
+    "description": "Maintain and update operational documentation and procedures.",
+    "companyName": "DocuOps",
+    "location": "Tallinn",
+    "salary": "55k-70k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["documentation", "operations"]
+  },
+  {
+    "title": "Business Process Coordinator",
+    "description": "Coordinate business process initiatives and support optimization efforts.",
+    "companyName": "ProcessLink",
+    "location": "Rotterdam",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["business processes", "coordination"]
+  },
+  {
+    "title": "Service Operations Manager",
+    "description": "Oversee service operations teams and drive continuous improvement.",
+    "companyName": "ServiceLead",
+    "location": "Remote",
+    "salary": "90k-110k",
+    "experience": "6+ years",
+    "remote": true,
+    "skills": ["service operations", "management"]
+  },
+  {
+    "title": "Workforce Planning Analyst",
+    "description": "Analyze workforce data and support staffing and capacity planning decisions.",
+    "companyName": "PeoplePlan",
+    "location": "Amsterdam",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["workforce planning", "analysis"]
+  },
+  {
+    "title": "Customer Insights Coordinator",
+    "description": "Collect and analyze customer feedback to improve service quality.",
+    "companyName": "InsightCX",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["customer insights", "analysis"]
+  },
+  {
+    "title": "Office Compliance Coordinator",
+    "description": "Ensure office operations comply with internal policies and regulations.",
+    "companyName": "OfficeSafe",
+    "location": "Vienna",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["compliance", "office operations"]
+  },
+  {
+    "title": "Service Desk Supervisor",
+    "description": "Supervise service desk staff and ensure high-quality support delivery.",
+    "companyName": "HelpDeskPro",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "4+ years",
+    "remote": true,
+    "skills": ["service desk", "supervision"]
+  },
+  {
+    "title": "Vendor Contract Coordinator",
+    "description": "Coordinate vendor contracts and support contract lifecycle management.",
+    "companyName": "Contractix",
+    "location": "Milan",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["contracts", "vendor coordination"]
+  },
+  {
+    "title": "Operational Readiness Analyst",
+    "description": "Assess operational readiness for new initiatives and process changes.",
+    "companyName": "ReadyOps",
+    "location": "Frankfurt",
+    "salary": "75k-95k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["operational readiness", "analysis"]
+  },
+  {
+    "title": "Employee Services Coordinator",
+    "description": "Coordinate employee services including benefits support and HR requests.",
+    "companyName": "PeopleServe",
+    "location": "Remote",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["employee services", "coordination"]
+  },
+  {
+    "title": "Records Compliance Officer",
+    "description": "Ensure proper handling and compliance of corporate records.",
+    "companyName": "RecordSure",
+    "location": "Tallinn",
+    "salary": "60k-80k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["records management", "compliance"]
+  },
+  {
+    "title": "Service Improvement Analyst",
+    "description": "Analyze service performance and recommend improvement initiatives.",
+    "companyName": "ImproveNow",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["service improvement", "analysis"]
+  },
+  {
+    "title": "Administrative Operations Lead",
+    "description": "Lead administrative operations and optimize internal workflows.",
+    "companyName": "AdminLead",
+    "location": "Munich",
+    "salary": "80k-100k",
+    "experience": "6+ years",
+    "remote": false,
+    "skills": ["administrative operations", "leadership"]
+  },
+  {
+    "title": "Supply Operations Coordinator",
+    "description": "Coordinate supply operations and monitor inventory movement.",
+    "companyName": "SupplyFlow",
+    "location": "Rotterdam",
+    "salary": "55k-75k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["supply operations", "coordination"]
+  },
+  {
+    "title": "Client Experience Manager",
+    "description": "Manage client experience initiatives and improve satisfaction metrics.",
+    "companyName": "ClientFirst",
+    "location": "Remote",
+    "salary": "80k-100k",
+    "experience": "5+ years",
+    "remote": true,
+    "skills": ["client experience", "management"]
+  },
+  {
+    "title": "Business Services Analyst",
+    "description": "Analyze shared business services and support optimization efforts.",
+    "companyName": "BizServices",
+    "location": "Brussels",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["business services", "analysis"]
+  },
+  {
+    "title": "Operational Change Coordinator",
+    "description": "Coordinate operational change initiatives and stakeholder communication.",
+    "companyName": "ChangeOps",
+    "location": "Remote",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["change management", "coordination"]
+  },
+  {
+    "title": "Corporate Facilities Planner",
+    "description": "Plan and optimize corporate facilities usage and space allocation.",
+    "companyName": "SpacePlan",
+    "location": "Oslo",
+    "salary": "75k-95k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["facilities planning", "space management"]
+  },
+  {
+    "title": "Operational Controls Analyst",
+    "description": "Monitor operational controls and ensure adherence to procedures.",
+    "companyName": "ControlOps",
+    "location": "Zurich",
+    "salary": "70k-90k",
+    "experience": "4+ years",
+    "remote": false,
+    "skills": ["operational controls", "monitoring"]
+  },
+  {
+    "title": "Customer Service Quality Analyst",
+    "description": "Evaluate customer service quality and support improvement programs.",
+    "companyName": "ServiceQuality",
+    "location": "Remote",
+    "salary": "60k-80k",
+    "experience": "3+ years",
+    "remote": true,
+    "skills": ["quality analysis", "customer service"]
+  },
+  {
+    "title": "Process Governance Officer",
+    "description": "Ensure governance standards are applied across operational processes.",
+    "companyName": "GovProcess",
+    "location": "Geneva",
+    "salary": "80k-100k",
+    "experience": "5+ years",
+    "remote": false,
+    "skills": ["process governance", "compliance"]
+  },
+  {
+    "title": "Shared Operations Manager",
+    "description": "Manage shared operations teams and standardize service delivery.",
+    "companyName": "SharedOps",
+    "location": "Remote",
+    "salary": "90k-110k",
+    "experience": "6+ years",
+    "remote": true,
+    "skills": ["operations management", "shared services"]
+  },
+  {
+    "title": "Operational Data Coordinator",
+    "description": "Coordinate operational data collection and reporting activities.",
+    "companyName": "DataOps",
+    "location": "Helsinki",
+    "salary": "65k-85k",
+    "experience": "3+ years",
+    "remote": false,
+    "skills": ["data coordination", "reporting"]
+  }
+]

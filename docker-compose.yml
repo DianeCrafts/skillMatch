@@ -35,28 +35,7 @@ services:
       - "9200:9200"
     networks:
       - skillmatch-network
-
-  # --------------------------
-  # User Service
-  # --------------------------
-  user-service:
-    image: skillmatch-user-service
-    container_name: user-service
-    depends_on:
-      - postgres
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: userdb
-      DB_USER: postgres
-      DB_PASSWORD: m2380223802  
-      JWT_SECRET: 0FB2H2Y90GL7TIF2+b95VFCC97TegQ7De2lXa7DTkQ7NrgfPCg/2g33jxore+7XfcZxB+QSOEMH6djDPqtqTBA==
-      JWT_EXPIRATION: 36000
-    ports:
-      - "8081:8080"
-    networks:
-      - skillmatch-network
+ 
 
   # --------------------------
   # Resume Service

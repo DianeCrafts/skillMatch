@@ -197,12 +197,12 @@ export default {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        alert("You must be logged in to apply.");
+        this.$toast.error("You must be logged in to apply.");
         return;
       }
 
       if (this.hasApplied(job)) {
-        alert("You already applied to this job.");
+        this.$toast.error("You already applied to this job.");
         return;
       }
 
@@ -210,16 +210,16 @@ export default {
         headers: { "x-user-id": userId }
       })
       .then(() => {
-        alert("Applied successfully!");
+        this.$toast.success("Applied successfully!");
         this.fetchAppliedJobs();
       })
       .catch(err => {
         if (err.response?.status === 400) {
-          alert("You already applied to this job.");
+          this.$toast.error("You already applied to this job.");
         } else if (err.response?.status === 403) {
-          alert("You must upload a resume first.");
+          this.$toast.error("You must upload a resume first.");
         } else {
-          alert("Failed to apply to job.");
+          this.$toast.error("Failed to apply to job.");
         }
         console.error("Apply failed:", err);
       });

@@ -1,0 +1,32 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Spring dev config
+application-dev.yml
+application-secrets.yml
+
+# Generated
+out/
+build/
+
+# Redis / database dumps if any
+*.rdb
+*.sql

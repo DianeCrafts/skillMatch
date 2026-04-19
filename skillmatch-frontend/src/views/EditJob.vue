@@ -72,7 +72,7 @@ export default {
         })
         .catch(err => {
           console.error("Failed to load job:", err);
-          alert("Could not load the job.");
+          this.$toast.error("Could not load the job.");
         });
     },
 
@@ -84,12 +84,12 @@ export default {
           headers: { "x-user-id": recruiterId }
         })
         .then(() => {
-          alert("Job updated successfully!");
+          this.$toast.success("Job updated successfully!");
           this.$router.push("/recruiter/my-jobs");
         })
         .catch(err => {
           console.error("Failed to update job:", err);
-          alert("Could not update job.");
+          this.$toast.error("Could not update job.");
         });
     }
   }

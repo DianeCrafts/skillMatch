@@ -79,7 +79,14 @@ public class JobController {
     public ResponseEntity<List<JobResponse>> searchJobs(
             @RequestParam String keyword
     ) {
+        long startTime = System.nanoTime();
+
         List<Job> results = jobSearchService.searchJobs(keyword);
+
+        long endTime = System.nanoTime();
+        long durationMs = (endTime - startTime) / 1_000_000;
+
+        System.out.println("Search took " + durationMs + " ms");
 
         return ResponseEntity.ok(
                 results.stream()
@@ -87,6 +94,7 @@ public class JobController {
                         .toList()
         );
     }
+
 
     @GetMapping("/recommended")
     public ResponseEntity<List<JobResponse>> getRecommendedJobs(

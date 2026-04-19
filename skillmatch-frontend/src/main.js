@@ -2,5 +2,5 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router/index.js";
 import "./assets/main.css";
-
-createApp(App).use(router).mount("#app");
+import toastPlugin from "@/plugins/toast";
+createApp(App).use(router).use(toastPlugin).mount("#app");

@@ -12,4 +12,5 @@ spring:
     show-sql: true
 
 ai:
-  url: http://ai-service:8000
+  service:
+    url: http://ai-service:8000

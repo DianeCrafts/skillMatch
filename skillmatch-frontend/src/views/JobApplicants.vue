@@ -80,7 +80,7 @@ export default {
         })
         .catch(err => {
           console.error("Failed to load applicants:", err);
-          alert("Could not load applicants.");
+          this.$toast.error("Could not load applicants.");
         });
     },
 
@@ -98,7 +98,7 @@ export default {
       })
       .catch(err => {
         console.error("Failed to update status:", err);
-        alert("Could not update applicant status.");
+        this.$toast.error("Could not update applicant status.");
       });
     }
   }

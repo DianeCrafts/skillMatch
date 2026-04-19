@@ -41,7 +41,7 @@ export default {
       const recruiterId = localStorage.getItem("userId");
 
       if (!recruiterId) {
-        alert("You must be logged in as recruiter.");
+        this.$toast.error("You must be logged in as recruiter.");
         return;
       }
 
@@ -49,12 +49,12 @@ export default {
         headers: { "x-user-id": recruiterId }
       })
       .then(() => {
-        alert("Job posted successfully!");
+        this.$toast.success("Job posted successfully!");
         this.$router.push("/recruiter-dashboard");
       })
       .catch(err => {
         console.error("Error posting job:", err);
-        alert("Failed to post job.");
+        this.$toast.error("Failed to post job.");
       });
     }
   }

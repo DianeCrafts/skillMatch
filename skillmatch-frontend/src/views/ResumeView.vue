@@ -81,7 +81,7 @@ export default {
         })
         .catch(err => {
           console.error("Failed to load resume:", err);
-          alert("Could not load resume.");
+          this.$toast.error("Could not load resume.");
         });
     }
   }

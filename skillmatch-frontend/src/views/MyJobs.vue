@@ -85,7 +85,7 @@ export default {
       })
       .catch(err => {
         console.error("Failed to load jobs:", err);
-        alert("Could not load your jobs.");
+        this.$toast.error("Could not load your jobs.");
       });
     },
 
@@ -111,11 +111,11 @@ export default {
       })
       .then(() => {
         this.jobs = this.jobs.filter(j => j.id !== id);
-        alert("Job deleted successfully.");
+        this.$toast.success("Job deleted successfully.");
       })
       .catch(err => {
         console.error("Failed to delete job:", err);
-        alert("Could not delete the job.");
+        this.$toast.error("Could not delete the job.");
       });
     }
   }

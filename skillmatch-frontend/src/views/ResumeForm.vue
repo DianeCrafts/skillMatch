@@ -218,7 +218,7 @@ export default {
 
       } catch (err) {
         console.error("Error loading resume", err);
-        alert("Could not load resume to edit.");
+        this.$toast.error("Could not load resume to edit.");
       }
     },
     // Add sections
@@ -264,17 +264,17 @@ export default {
         const userId = localStorage.getItem("userId");
         if (this.mode === "edit") {
           await resumeApi.put(`/resumes/${this.existingResumeId}`, this.form);
-          alert("Resume updated!");
+          this.$toast.success("Resume updated!");
         } else {
           await resumeApi.post(`/resumes/save?userId=${userId}`, this.form);
-          alert("Resume created!");
+          this.$toast.success("Resume created!");
         }
 
         this.$router.push("/dashboard");
 
       } catch (err) {
         console.error(err);
-        alert("Error saving resume");
+        this.$toast.error("Error saving resume");
       }
     }
 

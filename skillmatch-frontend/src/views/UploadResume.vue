@@ -96,7 +96,7 @@ export default {
         });
 
       } catch (err) {
-        alert("Error parsing resume");
+        this.$toast.error("Error parsing resume");
         console.error(err);
       }
     },
