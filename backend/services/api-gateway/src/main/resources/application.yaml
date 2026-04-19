@@ -2,20 +2,76 @@ server:
   port: 8080
 
 spring:
-  profiles:
-    active: dev
   application:
     name: api-gateway
+
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - ${FRONTEND_URL:http://localhost:5173}
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowed-headers:
+              - "*"
+            exposed-headers:
+              - Authorization
+              - Content-Type
+            allow-credentials: true
+
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+
+        - id: profile-service
+          uri: ${PROFILE_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/profiles/**
+
+        - id: job-service
+          uri: ${JOB_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/jobs/**
+
+        - id: application-service
+          uri: ${APPLICATION_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/applications/**
+
+        - id: file-service
+          uri: ${FILE_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/files/**
+
+        - id: notification-service
+          uri: ${NOTIFICATION_SERVICE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/notifications/**
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: always
+        include: health,info,gateway
 
-app:
-  api:
-    base-path: /api/v1
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.security: INFO
