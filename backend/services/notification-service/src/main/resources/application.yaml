@@ -28,3 +28,6 @@ management:
 app:
   api:
     base-path: /api/v1
+
+  jwt:
+    secret: ${JWT_SECRET}
