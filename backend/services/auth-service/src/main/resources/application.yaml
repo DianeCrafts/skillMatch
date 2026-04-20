@@ -7,9 +7,6 @@ spring:
   application:
     name: auth-service
 
-  datasource:
-    driver-class-name: org.postgresql.Driver
-
   jpa:
     open-in-view: false
     properties:
