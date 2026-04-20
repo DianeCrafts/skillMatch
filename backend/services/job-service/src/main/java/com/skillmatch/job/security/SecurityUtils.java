@@ -2,8 +2,9 @@ package com.skillmatch.job.security;
 
 import com.skillmatch.job.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 public final class SecurityUtils {
 
@@ -39,28 +40,30 @@ public final class SecurityUtils {
     }
 
     private static Claims getCurrentClaims() {
-        String token = getTokenFromSecurityContext();
+        String token = extractTokenFromRequest();
 
         if (jwtService == null) {
-            throw new IllegalStateException("JwtService not initialized in SecurityUtils");
+            throw new IllegalStateException("JwtService not initialized");
         }
 
         return jwtService.extractAllClaims(token);
     }
 
-    private static String getTokenFromSecurityContext() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    private static String extractTokenFromRequest() {
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        if (authentication == null || authentication.getCredentials() == null) {
-            throw new UnauthorizedException("Unauthorized");
+        if (attributes == null) {
+            throw new UnauthorizedException("No request context available");
         }
 
-        String token = authentication.getCredentials().toString();
+        HttpServletRequest request = attributes.getRequest();
+        String authHeader = request.getHeader("Authorization");
 
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Missing or invalid Authorization header");
         }
 
-        return token;
+        return authHeader.substring(7);
     }
 }

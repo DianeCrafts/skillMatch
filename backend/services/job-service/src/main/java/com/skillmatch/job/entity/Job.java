@@ -44,10 +44,10 @@ public class Job {
     @Column(nullable = false, length = 30)
     private ExperienceLevel experienceLevel;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "job_required_skills", joinColumns = @JoinColumn(name = "job_id"))
-    @Column(name = "skill", nullable = false)
-    private Set<String> requiredSkills = new HashSet<>();
+    @Column(name = "skill")
+    private Set<String> requiredSkills;
 
     private Integer salaryMin;
     private Integer salaryMax;
