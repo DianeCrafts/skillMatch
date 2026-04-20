@@ -2,6 +2,7 @@ package com.skillmatch.job.controller;
 
 import com.skillmatch.job.dto.request.CreateJobRequest;
 import com.skillmatch.job.dto.request.UpdateJobRequest;
+import com.skillmatch.job.dto.response.InternalJobSummaryResponse;
 import com.skillmatch.job.dto.response.JobResponse;
 import com.skillmatch.job.dto.response.JobSummaryResponse;
 import com.skillmatch.job.entity.EmploymentType;
@@ -110,5 +111,10 @@ public class JobController {
     public ResponseEntity<JobResponse> getMyJobById(@PathVariable Long jobId) {
         JobResponse response = jobService.getMyJobById(jobId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/internal/{jobId}")
+    public ResponseEntity<InternalJobSummaryResponse> getInternalJobSummary(@PathVariable Long jobId) {
+        return ResponseEntity.ok(jobService.getInternalJobSummary(jobId));
     }
 }

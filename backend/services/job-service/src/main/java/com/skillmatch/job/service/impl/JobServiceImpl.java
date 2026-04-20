@@ -2,6 +2,7 @@ package com.skillmatch.job.service.impl;
 
 import com.skillmatch.job.dto.request.CreateJobRequest;
 import com.skillmatch.job.dto.request.UpdateJobRequest;
+import com.skillmatch.job.dto.response.InternalJobSummaryResponse;
 import com.skillmatch.job.dto.response.JobResponse;
 import com.skillmatch.job.dto.response.JobSummaryResponse;
 import com.skillmatch.job.entity.Job;
@@ -259,6 +260,18 @@ public class JobServiceImpl implements JobService {
                 .applicationDeadline(job.getApplicationDeadline())
                 .saved(saved)
                 .createdAt(job.getCreatedAt())
+                .build();
+    }
+
+    @Override
+    public InternalJobSummaryResponse getInternalJobSummary(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
+
+        return InternalJobSummaryResponse.builder()
+                .id(job.getId())
+                .recruiterId(job.getRecruiterId())
+                .status(job.getStatus().name())
                 .build();
     }
 }

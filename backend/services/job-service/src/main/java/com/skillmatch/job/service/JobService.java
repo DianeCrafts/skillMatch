@@ -2,6 +2,7 @@ package com.skillmatch.job.service;
 
 import com.skillmatch.job.dto.request.CreateJobRequest;
 import com.skillmatch.job.dto.request.UpdateJobRequest;
+import com.skillmatch.job.dto.response.InternalJobSummaryResponse;
 import com.skillmatch.job.dto.response.JobResponse;
 import com.skillmatch.job.dto.response.JobSummaryResponse;
 import com.skillmatch.job.entity.EmploymentType;
@@ -34,4 +35,5 @@ public interface JobService {
     Page<JobSummaryResponse> getMyJobs(Pageable pageable);
 
     JobResponse getMyJobById(Long jobId);
+    InternalJobSummaryResponse getInternalJobSummary(Long jobId);
 }
