@@ -1,6 +1,8 @@
 package com.skillmatch.application.repository;
 
 import com.skillmatch.application.entity.Application;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,7 +17,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findByApplicantIdOrderByAppliedAtDesc(Long applicantId);
 
     @EntityGraph(attributePaths = {"statusHistory"})
-    List<Application> findByJobIdOrderByAppliedAtDesc(Long jobId);
+    Page<Application> findByJobId(Long jobId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"statusHistory"})
     Optional<Application> findWithStatusHistoryById(Long id);

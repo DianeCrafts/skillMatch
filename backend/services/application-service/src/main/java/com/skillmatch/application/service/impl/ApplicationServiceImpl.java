@@ -19,6 +19,8 @@ import com.skillmatch.application.service.JobClientService;
 import com.skillmatch.application.util.RoleConstants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -128,7 +130,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<ApplicationResponse> getApplicationsByJob(Long jobId) {
+    public Page<ApplicationResponse> getApplicationsByJob(Long jobId, Pageable pageable) {
         validateRole(RoleConstants.RECRUITER);
 
         Long recruiterId = SecurityUtils.getCurrentUserId();
@@ -144,10 +146,8 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new ForbiddenException("You can only view applications for your own jobs");
         }
 
-        return applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId)
-                .stream()
-                .map(applicationMapper::toResponse)
-                .toList();
+        return applicationRepository.findByJobId(jobId, pageable)
+                .map(applicationMapper::toResponse);
     }
 
     @Override

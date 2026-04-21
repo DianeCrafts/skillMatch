@@ -12,6 +12,11 @@ import java.util.List;
         name = "applications",
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_application_job_applicant", columnNames = {"job_id", "applicant_id"})
+        },
+        indexes = {
+                @Index(name = "idx_applications_job_id", columnList = "job_id"),
+                @Index(name = "idx_applications_applicant_id", columnList = "applicant_id"),
+                @Index(name = "idx_applications_applied_at", columnList = "applied_at")
         }
 )
 @Getter

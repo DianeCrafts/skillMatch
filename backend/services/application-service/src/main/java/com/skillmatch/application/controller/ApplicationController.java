@@ -8,6 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,10 +56,15 @@ public class ApplicationController {
     @GetMapping("/job/{jobId}")
     @Operation(
             summary = "Get applications for a job",
-            description = "ROLE: RECRUITER\nReturns all applications for a job owned by the authenticated recruiter."
+            description = "ROLE: RECRUITER\nReturns paginated applications for a job owned by the authenticated recruiter."
     )
-    public ResponseEntity<List<ApplicationResponse>> getApplicationsByJob(@PathVariable Long jobId) {
-        return ResponseEntity.ok(applicationService.getApplicationsByJob(jobId));
+    public ResponseEntity<Page<ApplicationResponse>> getApplicationsByJob(
+            @PathVariable Long jobId,
+            @ParameterObject
+            @PageableDefault(size = 20, sort = "appliedAt", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(applicationService.getApplicationsByJob(jobId, pageable));
     }
 
     @PatchMapping("/{applicationId}/status")
