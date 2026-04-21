@@ -322,7 +322,8 @@ Result:
 
 Execution Time: ~0.767 ms (DB only)
 
-📸 Screenshot:
+<img width="751" height="569" alt="image" src="https://github.com/user-attachments/assets/3150c000-35f0-433a-a38c-cd5ba606ec1c" />
+
 
 🟢 After Optimization (Index + Pagination)
 
@@ -343,7 +344,8 @@ Result:
 
 Execution Time: ~0.044 ms (DB only)
 
-📸 Screenshot:
+<img width="986" height="542" alt="image" src="https://github.com/user-attachments/assets/490be4c0-a5f8-46b2-ae89-e8d8a910b261" />
+
 
 ### Impact
 | Metric           | Before   | After      |
