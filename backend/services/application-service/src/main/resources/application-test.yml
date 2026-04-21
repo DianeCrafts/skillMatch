@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:applicationdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+app:
+  jwt:
+    secret: VGhpc0lzQVRlc3RTZWNyZXRLZXlGb3JKV1RUb2tlblNpZ25pbmdUaGF0SXNMb25nRW5vdWdo
+
+services:
+  job-service:
+    url: http://localhost:8083
