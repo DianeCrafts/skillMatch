@@ -299,11 +299,13 @@ ON saved_jobs (user_id, job_id);
 
 📷 Before
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="1101" height="752" alt="image" src="https://github.com/user-attachments/assets/b4e483a0-3345-4dcf-9858-1836777a8b73" />
+
 
 📷 After
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="906" height="783" alt="image" src="https://github.com/user-attachments/assets/29a0973f-c785-4c37-be8d-23f09c02c080" />
+
 
 ---
 
@@ -322,11 +324,13 @@ ON saved_jobs (user_id, job_id);
 
 📷 Before
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="1094" height="752" alt="image" src="https://github.com/user-attachments/assets/2282c5d0-4247-46e1-873c-524ac8e3639e" />
+
 
 📷 After
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="897" height="856" alt="image" src="https://github.com/user-attachments/assets/ad0e9ffb-9970-466b-a020-348177aa5f7a" />
+
 
 ---
 
@@ -345,11 +349,13 @@ ON saved_jobs (user_id, job_id);
 
 📷 Before
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="744" height="659" alt="image" src="https://github.com/user-attachments/assets/c354f878-2e64-4a1d-b638-04c24560efc2" />
+
 
 📷 After
 
-<!-- INSERT SCREENSHOT HERE -->
+<img width="879" height="496" alt="image" src="https://github.com/user-attachments/assets/8c3bf570-6442-4623-9d29-35757a59507d" />
+
 
 ---
 
