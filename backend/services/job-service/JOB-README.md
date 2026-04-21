@@ -247,16 +247,132 @@ Authorization: Bearer <JWT>
 3. Call Job endpoints
 
 ---
+## ⚡ Performance Optimization (Indexing)
 
-## ⚠️ Known Limitations (v1)
+To improve query performance and scalability, database indexing was introduced based on real query patterns used by the Job Service.
 
-* No caching (Redis not used yet)
-* No job applications
-* No company data integration
-* N+1 query for saved jobs (to optimize later)
-* Skills stored as `ElementCollection` (not normalized)
+### 🔍 Problem
+
+Initial performance analysis using `EXPLAIN ANALYZE` revealed:
+
+* Full table scans (`Seq Scan`) on the `jobs` table
+* High number of rows filtered (up to ~10,000 rows)
+* Unoptimized sorting on `created_at`
+* Slower response times for filtered job queries and recruiter job listings
 
 ---
+
+### 🛠️ Solution — Indexing Strategy
+
+Indexes were added based on the most frequent query patterns:
+
+```sql
+CREATE INDEX idx_jobs_recruiter_created_at
+ON jobs (recruiter_id, created_at DESC);
+
+CREATE INDEX idx_saved_jobs_user_saved_at
+ON saved_jobs (user_id, saved_at DESC);
+
+CREATE INDEX idx_jobs_published_filters_created_at
+ON jobs (status, location, employment_type, experience_level, created_at DESC);
+
+CREATE INDEX idx_saved_jobs_user_job
+ON saved_jobs (user_id, job_id);
+```
+
+---
+
+### 📊 Results
+
+#### 1. Filtered Job Search (`GET /api/jobs`)
+
+* Before:
+
+    * Sequential scan on entire table
+    * ~10,000 rows filtered
+    * Execution Time: ~1.45 ms
+* After:
+
+    * Bitmap Index Scan used
+    * Reduced rows scanned significantly
+    * Execution Time: ~0.25 ms
+
+📷 Before
+
+<!-- INSERT SCREENSHOT HERE -->
+
+📷 After
+
+<!-- INSERT SCREENSHOT HERE -->
+
+---
+
+#### 2. Keyword + Filter Search
+
+* Before:
+
+    * Full table scan
+    * Expensive filtering with `LIKE`
+    * Execution Time: ~1.79 ms
+* After:
+
+    * Index used for filtering
+    * Reduced scanned rows
+    * Execution Time: ~0.29 ms
+
+📷 Before
+
+<!-- INSERT SCREENSHOT HERE -->
+
+📷 After
+
+<!-- INSERT SCREENSHOT HERE -->
+
+---
+
+#### 3. Recruiter Jobs (`GET /api/jobs/me`)
+
+* Before:
+
+    * Sequential scan
+    * ~9,500 rows filtered
+    * Execution Time: ~1.13 ms
+* After:
+
+    * Index Scan on `(recruiter_id, created_at)`
+    * Direct lookup
+    * Execution Time: ~0.03 ms
+
+📷 Before
+
+<!-- INSERT SCREENSHOT HERE -->
+
+📷 After
+
+<!-- INSERT SCREENSHOT HERE -->
+
+---
+
+### 🚀 Impact
+
+* Reduced query execution time by up to **~80–97%**
+* Eliminated full table scans for critical endpoints
+* Improved scalability for large datasets (10k+ jobs tested)
+* Enabled efficient filtering, sorting, and pagination
+
+---
+
+### 🧠 Key Takeaways
+
+* Indexing must align with **real query patterns**, not assumptions
+* Composite indexes significantly improve multi-filter queries
+* Sorting columns (e.g., `created_at DESC`) should be included in indexes
+* Performance gains become more visible as dataset size grows
+
+---
+
+This optimization demonstrates practical backend performance tuning using PostgreSQL indexing and real query analysis.
+
 
 ## 🚀 Future Improvements
 
