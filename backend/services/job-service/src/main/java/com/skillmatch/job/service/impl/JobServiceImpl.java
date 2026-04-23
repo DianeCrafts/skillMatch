@@ -5,10 +5,10 @@ import com.skillmatch.job.dto.request.UpdateJobRequest;
 import com.skillmatch.job.dto.response.InternalJobSummaryResponse;
 import com.skillmatch.job.dto.response.JobResponse;
 import com.skillmatch.job.dto.response.JobSummaryResponse;
-import com.skillmatch.job.entity.Job;
-import com.skillmatch.job.entity.JobStatus;
 import com.skillmatch.job.entity.EmploymentType;
 import com.skillmatch.job.entity.ExperienceLevel;
+import com.skillmatch.job.entity.Job;
+import com.skillmatch.job.entity.JobStatus;
 import com.skillmatch.job.exception.ForbiddenException;
 import com.skillmatch.job.exception.ResourceNotFoundException;
 import com.skillmatch.job.repository.JobRepository;
@@ -17,8 +17,6 @@ import com.skillmatch.job.security.SecurityUtils;
 import com.skillmatch.job.service.JobService;
 import com.skillmatch.job.specification.JobSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -62,7 +60,6 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse updateJob(Long jobId, UpdateJobRequest request) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -89,7 +86,6 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public void deleteJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -101,7 +97,6 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse publishJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -118,7 +113,6 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse unpublishJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -204,7 +198,6 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "internalJobSummary", key = "#jobId")
     public InternalJobSummaryResponse getInternalJobSummary(Long jobId) {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
