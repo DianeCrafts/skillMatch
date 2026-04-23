@@ -14,10 +14,11 @@ import com.skillmatch.job.exception.ResourceNotFoundException;
 import com.skillmatch.job.repository.JobRepository;
 import com.skillmatch.job.repository.SavedJobRepository;
 import com.skillmatch.job.security.SecurityUtils;
-
 import com.skillmatch.job.service.JobService;
 import com.skillmatch.job.specification.JobSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -61,6 +62,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse updateJob(Long jobId, UpdateJobRequest request) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -87,6 +89,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public void deleteJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -98,6 +101,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse publishJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -114,6 +118,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @CacheEvict(value = "internalJobSummary", key = "#jobId")
     public JobResponse unpublishJob(Long jobId) {
         Long currentUserId = SecurityUtils.getCurrentUserId();
         String currentUserRole = SecurityUtils.getCurrentUserRole();
@@ -197,6 +202,20 @@ public class JobServiceImpl implements JobService {
         return mapToJobResponse(job, saved);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "internalJobSummary", key = "#jobId")
+    public InternalJobSummaryResponse getInternalJobSummary(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
+
+        return InternalJobSummaryResponse.builder()
+                .id(job.getId())
+                .recruiterId(job.getRecruiterId())
+                .status(job.getStatus().name())
+                .build();
+    }
+
     private void validateRecruiterRole(String role) {
         if (!ROLE_RECRUITER.equals(role)) {
             throw new ForbiddenException("Only recruiters can perform this action");
@@ -260,18 +279,6 @@ public class JobServiceImpl implements JobService {
                 .applicationDeadline(job.getApplicationDeadline())
                 .saved(saved)
                 .createdAt(job.getCreatedAt())
-                .build();
-    }
-
-    @Override
-    public InternalJobSummaryResponse getInternalJobSummary(Long jobId) {
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
-
-        return InternalJobSummaryResponse.builder()
-                .id(job.getId())
-                .recruiterId(job.getRecruiterId())
-                .status(job.getStatus().name())
                 .build();
     }
 }
