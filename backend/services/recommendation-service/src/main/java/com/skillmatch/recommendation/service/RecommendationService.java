@@ -1,7 +1,14 @@
 package com.skillmatch.recommendation.service;
-import com.skillmatch.recommendation.dto.response.*;
-import lombok.RequiredArgsConstructor;
 
+import com.skillmatch.recommendation.dto.response.ExperienceDto;
+import com.skillmatch.recommendation.dto.response.JobDataResponse;
+import com.skillmatch.recommendation.dto.response.JobRecommendationResponse;
+import com.skillmatch.recommendation.dto.response.ProfileDataResponse;
+import com.skillmatch.recommendation.dto.response.SkillDto;
+import com.skillmatch.recommendation.entity.UserEmbedding;
+import com.skillmatch.recommendation.repository.JobEmbeddingRepository;
+import com.skillmatch.recommendation.repository.UserEmbeddingRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,15 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.skillmatch.recommendation.service.ProfileServiceClient;
-import com.skillmatch.recommendation.service.JobServiceClient;
-import com.skillmatch.recommendation.service.EmbeddingServiceClient;
-
-import com.skillmatch.recommendation.entity.UserEmbedding;
-import com.skillmatch.recommendation.entity.JobEmbedding;
-
-import com.skillmatch.recommendation.repository.UserEmbeddingRepository;
-import com.skillmatch.recommendation.repository.JobEmbeddingRepository;
 @Service
 @RequiredArgsConstructor
 public class RecommendationService {
@@ -25,11 +23,17 @@ public class RecommendationService {
     private final ProfileServiceClient profileClient;
     private final JobServiceClient jobClient;
     private final EmbeddingServiceClient embeddingClient;
+    private final RecommendationCacheService cacheService;
 
     private final UserEmbeddingRepository userRepo;
     private final JobEmbeddingRepository jobRepo;
 
     public List<JobRecommendationResponse> recommendJobsForUser(Long userId, int limit) {
+
+        List<JobRecommendationResponse> cached = cacheService.get(userId, limit);
+        if (cached != null) {
+            return cached;
+        }
 
         UserEmbedding userEmbedding = userRepo.findById(userId)
                 .orElseGet(() -> recomputeAndSaveUserEmbedding(userId));
@@ -51,7 +55,7 @@ public class RecommendationService {
                         r -> ((Number) r[1]).doubleValue()
                 ));
 
-        return jobs.stream()
+        List<JobRecommendationResponse> recommendations = jobs.stream()
                 .map(job -> new JobRecommendationResponse(
                         job.id(),
                         job.title(),
@@ -60,10 +64,15 @@ public class RecommendationService {
                         scoreMap.get(job.id())
                 ))
                 .toList();
+
+        cacheService.put(userId, limit, recommendations);
+
+        return recommendations;
     }
 
     public void recomputeUserEmbedding(Long userId) {
         recomputeAndSaveUserEmbedding(userId);
+        cacheService.evictUser(userId);
     }
 
     public void recomputeJobEmbedding(Long jobId) {
@@ -76,7 +85,11 @@ public class RecommendationService {
         String vector = toVectorString(embedding);
 
         jobRepo.upsertJobEmbedding(jobId, text, vector, now);
+
+        // Simple invalidation strategy for now
+        cacheService.clearAllRecommendations();
     }
+
     private UserEmbedding recomputeAndSaveUserEmbedding(Long userId) {
         ProfileDataResponse profile = profileClient.getProfileByUserId(userId);
         String text = buildProfileText(profile);
@@ -87,6 +100,7 @@ public class RecommendationService {
         String vector = toVectorString(embedding);
 
         userRepo.upsertUserEmbedding(userId, text, vector, now);
+        cacheService.evictUser(userId);
 
         UserEmbedding entity = new UserEmbedding();
         entity.setUserId(userId);
@@ -98,13 +112,21 @@ public class RecommendationService {
     }
 
     private String buildProfileText(ProfileDataResponse p) {
-        return "Summary: " + p.summary() +
-                " Skills: " + p.skills().stream()
+        String skills = p.skills() == null
+                ? ""
+                : p.skills().stream()
                 .map(SkillDto::name)
-                .collect(Collectors.joining(", ")) +
-                " Experience: " + p.experiences().stream()
+                .collect(Collectors.joining(", "));
+
+        String experience = p.experiences() == null
+                ? ""
+                : p.experiences().stream()
                 .map(ExperienceDto::description)
                 .collect(Collectors.joining(". "));
+
+        return "Summary: " + p.summary() +
+                " Skills: " + skills +
+                " Experience: " + experience;
     }
 
     private String buildJobText(JobDataResponse j) {
