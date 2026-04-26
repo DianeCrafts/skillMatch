@@ -54,9 +54,13 @@ curl -o /dev/null -s -w "Total time: %{time_total}s\n" \
 ```
 ## Results
 Before Redis
+<img width="1280" height="387" alt="image" src="https://github.com/user-attachments/assets/46c573fc-7e7f-4f3f-9a8a-74edbcecba93" />
+
 - limit=20 → ~19ms – 55ms 
 - limit=50 → ~24ms – 38ms 
-- After Redis (cache hit)
+After Redis (cache hit)
+<img width="1280" height="478" alt="image" src="https://github.com/user-attachments/assets/a50808ee-ccd8-4e4f-943e-731b97f0b0d6" />
+
 - limit=20 → ~9ms 
 - limit=50 → ~9ms 
 - Improvement 
