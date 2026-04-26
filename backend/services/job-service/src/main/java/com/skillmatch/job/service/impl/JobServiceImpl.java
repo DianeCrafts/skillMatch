@@ -15,6 +15,7 @@ import com.skillmatch.job.repository.JobRepository;
 import com.skillmatch.job.repository.SavedJobRepository;
 import com.skillmatch.job.security.SecurityUtils;
 import com.skillmatch.job.service.JobService;
+import com.skillmatch.job.service.RecommendationServiceClient;
 import com.skillmatch.job.specification.JobSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,13 +24,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class JobServiceImpl implements JobService {
 
     private static final String ROLE_RECRUITER = "RECRUITER";
-
+    private final RecommendationServiceClient recommendationServiceClient;
     private final JobRepository jobRepository;
     private final SavedJobRepository savedJobRepository;
 
@@ -82,6 +85,11 @@ public class JobServiceImpl implements JobService {
         Job updatedJob = jobRepository.save(job);
         boolean saved = savedJobRepository.existsByUserIdAndJob_Id(currentUserId, updatedJob.getId());
 
+
+        if (updatedJob.getStatus() == JobStatus.PUBLISHED) {
+            recommendationServiceClient.recomputeJobEmbedding(updatedJob.getId());
+        }
+
         return mapToJobResponse(updatedJob, saved);
     }
 
@@ -107,6 +115,9 @@ public class JobServiceImpl implements JobService {
         job.setStatus(JobStatus.PUBLISHED);
 
         Job updatedJob = jobRepository.save(job);
+
+        recommendationServiceClient.recomputeJobEmbedding(updatedJob.getId());
+
         boolean saved = savedJobRepository.existsByUserIdAndJob_Id(currentUserId, updatedJob.getId());
 
         return mapToJobResponse(updatedJob, saved);
@@ -202,11 +213,7 @@ public class JobServiceImpl implements JobService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
 
-        return InternalJobSummaryResponse.builder()
-                .id(job.getId())
-                .recruiterId(job.getRecruiterId())
-                .status(job.getStatus().name())
-                .build();
+        return mapToInternalJobSummaryResponse(job);
     }
 
     private void validateRecruiterRole(String role) {
@@ -272,6 +279,27 @@ public class JobServiceImpl implements JobService {
                 .applicationDeadline(job.getApplicationDeadline())
                 .saved(saved)
                 .createdAt(job.getCreatedAt())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InternalJobSummaryResponse> getInternalJobsBatch(List<Long> jobIds) {
+        return jobRepository.findAllById(jobIds)
+                .stream()
+                .map(this::mapToInternalJobSummaryResponse)
+                .toList();
+    }
+
+    private InternalJobSummaryResponse mapToInternalJobSummaryResponse(Job job) {
+        return InternalJobSummaryResponse.builder()
+                .id(job.getId())
+                .recruiterId(job.getRecruiterId())
+                .status(job.getStatus().name())
+                .title(job.getTitle())
+                .description(job.getDescription())
+                .location(job.getLocation())
+                .requiredSkills(job.getRequiredSkills())
                 .build();
     }
 }

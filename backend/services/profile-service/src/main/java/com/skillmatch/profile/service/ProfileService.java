@@ -73,4 +73,11 @@ public class ProfileService {
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
+    @Transactional(readOnly = true)
+    public ProfileResponse getProfileByUserId(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
+        return profileMapper.toProfileResponse(profile);
+    }
 }

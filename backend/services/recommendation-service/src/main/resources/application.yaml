@@ -28,3 +28,11 @@ management:
 app:
   api:
     base-path: /api/v1
+
+  jwt:
+    secret: ${JWT_SECRET}
+
+  services:
+    profile-service-url: http://localhost:8082
+    job-service-url: http://localhost:8083
+    embedding-service-url: http://localhost:8000

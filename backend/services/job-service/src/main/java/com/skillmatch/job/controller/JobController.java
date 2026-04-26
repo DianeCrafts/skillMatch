@@ -21,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/jobs")
 @RequiredArgsConstructor
@@ -116,5 +118,12 @@ public class JobController {
     @GetMapping("/internal/{jobId}")
     public ResponseEntity<InternalJobSummaryResponse> getInternalJobSummary(@PathVariable Long jobId) {
         return ResponseEntity.ok(jobService.getInternalJobSummary(jobId));
+    }
+
+    @PostMapping("/internal/batch")
+    public ResponseEntity<List<InternalJobSummaryResponse>> getInternalJobsBatch(
+            @RequestBody List<Long> jobIds
+    ) {
+        return ResponseEntity.ok(jobService.getInternalJobsBatch(jobIds));
     }
 }

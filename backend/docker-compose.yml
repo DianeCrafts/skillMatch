@@ -79,6 +79,18 @@ services:
     volumes:
       - notification_pg_data:/var/lib/postgresql/data
 
+  recommendation-db:
+    image: pgvector/pgvector:pg16
+    container_name: skillmatch-recommendation-db
+    environment:
+      POSTGRES_DB: ${RECOMMENDATION_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5439:5432"
+    volumes:
+      - recommendation_pg_data:/var/lib/postgresql/data
+
 volumes:
   auth_pg_data:
   profile_pg_data:
@@ -86,3 +98,4 @@ volumes:
   application_pg_data:
   file_pg_data:
   notification_pg_data:
+  recommendation_pg_data:
