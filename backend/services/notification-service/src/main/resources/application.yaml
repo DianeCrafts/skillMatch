@@ -2,8 +2,6 @@ server:
   port: 8086
 
 spring:
-  profiles:
-    active: dev
   application:
     name: notification-service
 

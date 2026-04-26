@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 services:
   redis:
@@ -11,7 +11,7 @@ services:
     image: postgres:16
     container_name: skillmatch-auth-db
     environment:
-      POSTGRES_DB: ${AUTH_DB}
+      POSTGRES_DB: ${AUTH_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -23,7 +23,7 @@ services:
     image: postgres:16
     container_name: skillmatch-profile-db
     environment:
-      POSTGRES_DB: ${PROFILE_DB}
+      POSTGRES_DB: ${PROFILE_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -35,7 +35,7 @@ services:
     image: postgres:16
     container_name: skillmatch-job-db
     environment:
-      POSTGRES_DB: ${JOB_DB}
+      POSTGRES_DB: ${JOB_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -47,7 +47,7 @@ services:
     image: postgres:16
     container_name: skillmatch-application-db
     environment:
-      POSTGRES_DB: ${APPLICATION_DB}
+      POSTGRES_DB: ${APPLICATION_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -59,7 +59,7 @@ services:
     image: postgres:16
     container_name: skillmatch-file-db
     environment:
-      POSTGRES_DB: ${FILE_DB}
+      POSTGRES_DB: ${FILE_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -71,7 +71,7 @@ services:
     image: postgres:16
     container_name: skillmatch-notification-db
     environment:
-      POSTGRES_DB: ${NOTIFICATION_DB}
+      POSTGRES_DB: ${NOTIFICATION_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -83,13 +83,203 @@ services:
     image: pgvector/pgvector:pg16
     container_name: skillmatch-recommendation-db
     environment:
-      POSTGRES_DB: ${RECOMMENDATION_DB}
+      POSTGRES_DB: ${RECOMMENDATION_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5439:5432"
     volumes:
       - recommendation_pg_data:/var/lib/postgresql/data
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+    container_name: skillmatch-auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: auth-db
+      POSTGRES_PORT: 5432
+      AUTH_DB_NAME: ${AUTH_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+    depends_on:
+      - auth-db
+
+  profile-service:
+    build:
+      context: ./services/profile-service
+    container_name: skillmatch-profile-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: profile-db
+      POSTGRES_PORT: 5432
+      PROFILE_DB_NAME: ${PROFILE_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - profile-db
+
+  job-service:
+    build:
+      context: ./services/job-service
+    container_name: skillmatch-job-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: job-db
+      POSTGRES_PORT: 5432
+      JOB_DB_NAME: ${JOB_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      RECOMMENDATION_SERVICE_URL: http://recommendation-service:8087
+    depends_on:
+      - job-db
+
+  application-service:
+    build:
+      context: ./services/application-service
+    container_name: skillmatch-application-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: application-db
+      POSTGRES_PORT: 5432
+      APPLICATION_DB_NAME: ${APPLICATION_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      JOB_SERVICE_URL: http://job-service:8083
+    depends_on:
+      - application-db
+      - job-service
+
+  file-service:
+    build:
+      context: ./services/file-service
+    container_name: skillmatch-file-service
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: file-db
+      POSTGRES_PORT: 5432
+      FILE_DB_NAME: ${FILE_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+      FILE_UPLOAD_DIR: /app/uploads/resumes
+    volumes:
+      - file_uploads:/app/uploads
+    depends_on:
+      - file-db
+
+  notification-service:
+    build:
+      context: ./services/notification-service
+    container_name: skillmatch-notification-service
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: notification-db
+      POSTGRES_PORT: 5432
+      NOTIFICATION_DB_NAME: ${NOTIFICATION_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - notification-db
+
+  recommendation-service:
+    build:
+      context: ./services/recommendation-service
+    container_name: skillmatch-recommendation-service
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+
+      POSTGRES_HOST: recommendation-db
+      POSTGRES_PORT: 5432
+      RECOMMENDATION_DB_NAME: ${RECOMMENDATION_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      PROFILE_SERVICE_URL: http://profile-service:8082
+      JOB_SERVICE_URL: http://job-service:8083
+      EMBEDDING_SERVICE_URL: http://embedding-service:8000
+    depends_on:
+      - recommendation-db
+      - redis
+      - profile-service
+      - job-service
+      - embedding-service
+
+  embedding-service:
+    build:
+      context: ./services/embedding-service
+    container_name: skillmatch-embedding-service
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: 1
+      RECOMMENDATION_SERVICE_URL: http://recommendation-service:8087
+
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+    container_name: skillmatch-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      JWT_SECRET: ${JWT_SECRET}
+
+      AUTH_SERVICE_URL: http://auth-service:8081
+      PROFILE_SERVICE_URL: http://profile-service:8082
+      JOB_SERVICE_URL: http://job-service:8083
+      APPLICATION_SERVICE_URL: http://application-service:8084
+      FILE_SERVICE_URL: http://file-service:8085
+      NOTIFICATION_SERVICE_URL: http://notification-service:8086
+      RECOMMENDATION_SERVICE_URL: http://recommendation-service:8087
+    depends_on:
+      - auth-service
+      - profile-service
+      - job-service
+      - application-service
+      - file-service
+      - notification-service
+      - recommendation-service
 
 volumes:
   auth_pg_data:
@@ -99,3 +289,4 @@ volumes:
   file_pg_data:
   notification_pg_data:
   recommendation_pg_data:
+  file_uploads:

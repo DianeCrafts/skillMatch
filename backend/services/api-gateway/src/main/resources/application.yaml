@@ -60,6 +60,10 @@ spring:
           uri: ${NOTIFICATION_SERVICE_URL:http://localhost:8086}
           predicates:
             - Path=/api/notifications/**
+        - id: recommendation-service
+          uri: ${RECOMMENDATION_SERVICE_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/recommendations/**
 
 security:
   jwt:
